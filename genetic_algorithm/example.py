@@ -13,13 +13,14 @@ import selection_functions as sf
 import fitness_functions as ff
 
 
-graph = create_full_graph(8)
-min_weight = weight_of_min_tree(graph)
+graph = create_full_graph(10)
+min_weight = weight_of_min_tree(graph)  # работает на основе модуля scipy
 print("Вес минимального остовного дерева:", min_weight)
 print("Наилучшее значение фитнес-функции:", 1 / min_weight)
-ga = GA(num_of_individuals=100, selection_coefficient=0.1, probability_of_mutation=0.05, \
-	gens_mutation=0.1, num_of_generations=3000, log_cycle=100, graph=graph, reproduction=rf.uniform_reproduction,\
+ga = GA(num_of_individuals=1000, selection_coefficient=0.1, probability_of_mutation=0.05, \
+	gens_mutation=0.1, num_of_generations=1000, log_cycle=100, graph=graph, reproduction=rf.uniform_reproduction,\
 	mutations=mf.gen_mutations, selection=sf.elite_selection, fitness=ff.fitness_function)
+
 ga.run()
 
 
