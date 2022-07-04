@@ -57,7 +57,7 @@ def individual_to_graph(individual_code, init_graph):
             mask = mask << 1 # переход к проверке следующего ребра
     return graph
 
-def tree_cost(tree):
+def tree_cost(tree, init_graph):
     """
     Оценивает вес остовного дерева. Если
     переданный граф не является остовным
@@ -69,6 +69,9 @@ def tree_cost(tree):
 
     is_visited = [False] * n
     num_edges = get_number_of_edges(tree)
+    if num_edges != len(init_graph) - 1:
+        return float("Inf")
+
     visited_edges = 0
     cost, visited_edges = depth_search(tree, 0, is_visited, 0, visited_edges)
 
@@ -156,6 +159,15 @@ def get_number_of_edges(graph):
     # каждое ребро представлено в графе дважды
     return answer // 2
 
+def get_sum_of_edges(graph):
+    """
+    Считает суммарный вес ребер в графе.
+    """
+    answer = 0
+    for i in range(len(graph)):
+        for weight, _ in graph[i]:
+            answer += weight
+    return answer // 2
 
 
 

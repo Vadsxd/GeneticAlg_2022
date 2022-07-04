@@ -20,10 +20,11 @@ def create_individuals(num_of_edges, num_of_individuals=100):
   for i in range(num_of_individuals):
     indiv = Individual(random.randint(0, 2 ** num_of_edges - 1))
     individuals.append(indiv)
+
   return individuals
 
 
-def assign_fitness(individuals, graph, fitness_func):
+def assign_fitness(individuals, graph, fitness_func, epsilon):
   """
   Получает на вход список экземпляров класса
   Individual и считает фитнес-функцию для тех,
@@ -33,11 +34,12 @@ def assign_fitness(individuals, graph, fitness_func):
   individuals - список особей
   graph - граф
   fitness_func - фитнес-функция
+  epsilon - минимальное значение фитнес-функции
   """
   for i in range(len(individuals)):
     if individuals[i].fitness != None:
       continue
-    individuals[i].fitness = fitness_func(individuals[i], graph)
+    individuals[i].fitness = fitness_func(individuals[i], graph, epsilon)
 
 def log(individuals, generation_number):
   """
@@ -59,6 +61,6 @@ def log(individuals, generation_number):
   
   gen_codes = [indiv.gen_code for indiv in individuals]
   print("Количество уникальных генетических кодов:", len(list(set(gen_codes))))
-
+  print()
 
 

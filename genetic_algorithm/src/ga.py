@@ -15,7 +15,7 @@ class GA:
     и запуск генетического алгоритма.
     """
 
-    def __init__(self, num_of_individuals, selection_coefficient, \
+    def __init__(self, convergence, num_of_individuals, selection_coefficient, \
                  probability_of_mutation, gens_mutation, \
                  num_of_generations, log_cycle, graph, reproduction, \
                  mutations, selection, fitness):
@@ -53,19 +53,28 @@ class GA:
         self.selection = selection
         self.fitness = fitness
         self.num_of_edges = gf.get_number_of_edges(graph)
+        self.epsilon = 1 / gf.get_sum_of_edges(graph)
+        self.convergence = convergence
 
     def run(self):
         individuals = gen_algf.create_individuals(self.num_of_edges, self.num_of_individuals)
-        gen_algf.assign_fitness(individuals, self.graph, self.fitness)
+        gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
 
         for generation in range(0, self.num_of_generations+1):
             # логирование
             if generation % self.log_cycle == 0:
                 gen_algf.log(individuals, generation)
 
+            # проверка на сходимость
+            gen_codes = [indiv.gen_code for indiv in individuals]
+            if len(list(set(gen_codes))) <= self.convergence:
+                gen_algf.log(individuals, generation)
+                break
+
             # запуск кроссовера
             new_individuals = self.reproduction(individuals, self.num_of_edges)
-            gen_algf.assign_fitness(new_individuals, self.graph, self.fitness)
+            gen_algf.assign_fitness(new_individuals, self.graph, self.fitness, self.epsilon)
+
 
             # объединение потомков с родителями и произведение мутаций
             individuals += new_individuals
@@ -73,9 +82,10 @@ class GA:
                            self.gens_mutation, self.num_of_edges)
 
             # пересчет значений фитнес ф-и для каждой особи
-            gen_algf.assign_fitness(individuals, self.graph, self.fitness)
+            gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
 
             # отбор особей в новую популяцию
             individuals = self.selection(individuals, self.num_of_individuals, \
                                          self.selection_coefficient)
+
 

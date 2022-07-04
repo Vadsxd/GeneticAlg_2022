@@ -8,10 +8,10 @@ random.choices в функциях отбора.
 
 """
 
-from graph_functions import individual_to_graph, tree_cost
+from graph_functions import individual_to_graph, tree_cost, get_number_of_edges
 
 
-def fitness_function(individual, init_graph, epsilon=0.001):
+def fitness_function(individual, init_graph, epsilon):
     """
     Фитнес функция, вычисляющая значение по
     следующему принципу:
@@ -27,9 +27,12 @@ def fitness_function(individual, init_graph, epsilon=0.001):
     """
     graph = individual_to_graph(individual.gen_code, init_graph)
     individual.graph = graph
-    answer = 1 / tree_cost(graph)
+    answer = 1 / tree_cost(graph, init_graph)
     if answer == 0:
         answer += epsilon
+    n = len(init_graph)
+    num_edges = get_number_of_edges(graph)
+    answer -= 2 * epsilon * abs(num_edges - n + 1) / (abs(n ** 2 - 3 * n - 2))
     return answer
 
 

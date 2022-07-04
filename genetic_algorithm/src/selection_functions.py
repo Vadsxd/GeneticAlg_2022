@@ -32,7 +32,7 @@ def elite_selection(individuals, num_of_individuals, coefficient):
     elite, others = individuals[:num_elite], individuals[num_elite:]
 
     # выбор случайных особей
-    new_individuals = random.choices(others, k=num_others)
+    new_individuals = random.choices(individuals, k=num_others)
     return elite + new_individuals
 
 
