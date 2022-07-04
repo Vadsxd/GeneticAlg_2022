@@ -2,9 +2,9 @@
 Файл, содержащий функции мутации.
 
 ------Соглашение о реализуемых функциях мутации------
-Реализуемая функция не должна ничего возвращать. Гены особей
-меняются в передаваемом списке. Поле fitness особи с измененным
-генетическим кодом должно быть установлено в None. Это необходимо
+Реализуемая функция должна вернуть список особей, которые подверглись мутации.
+В процессе выполнения переданное мн-во особой меняется (в результате мн-во уже будет включать мут-ов)
+Поле fitness особи с измененным генетическим кодом должно быть установлено в None. Это необходимо
 для пересчета значений фитнес-функций для мутировавших особей.
 """
 
@@ -23,10 +23,16 @@ def gen_mutations(individuals, probability_of_mutation, gens_mutation, num_of_ge
     nums_of_gens - длина генетического кода особей
     """
     ch = random.choices([False, True], [1 - probability_of_mutation, probability_of_mutation], k=len(individuals))
+    list_mutants = []
+
     for i in range(len(individuals)):
         if ch[i]:
             mutate(individuals[i], gens_mutation, num_of_gens)
             individuals[i].fitness = None
+            list_mutants.append(individuals[i])
+
+    return list_mutants
+
 
 def mutate(individual, prob, num_of_gens):
     """
