@@ -1,5 +1,7 @@
 import dearpygui.dearpygui as dpg
 
+settings = []
+
 
 def end_prog():
     exit(0)
@@ -9,24 +11,84 @@ def graphic_usage():
     print(1)
 
 
+def change_mode():
+    if dpg.get_item_label("Mode of Visualisation") == "To End":
+        dpg.set_item_label("Mode of Visualisation", "Iterable")
+    else:
+        dpg.set_item_label("Mode of Visualisation", "To End")
+
+
+def change_transition_mode():
+    if dpg.get_item_label("Transition Mode") == "Button":
+        dpg.set_item_label("Transition Mode", "SlideShow")
+    else:
+        dpg.set_item_label("Transition Mode", "Button")
+
+
+def reset_settings():
+    settings.clear()
+    dpg.set_value("Number of Generations Slider", 1000)
+    settings.append(1000)
+    dpg.set_value("Number of Individuals Slider", 100)
+    settings.append(100)
+    dpg.set_value("Gens Mutation Slider", 0.1)
+    settings.append(0.1)
+    dpg.set_value("Selection Coefficient Slider", 0.1)
+    settings.append(0.1)
+    dpg.set_value("Probability of Mutation Slider", 0.05)
+    settings.append(0.05)
+    dpg.set_value("Log Cycle Slider", 50)
+    settings.append(50)
+    dpg.set_item_label("Mode of Visualisation", "Iterable")
+    settings.append("Iterable")
+    dpg.set_item_label("Transition Mode", "Button")
+    settings.append("Button")
+
+
+def set_item_values():
+    dpg.set_value("Number of Generations Slider", settings[0])
+    dpg.set_value("Number of Individuals Slider", settings[1])
+    dpg.set_value("Gens Mutation Slider", settings[2])
+    dpg.set_value("Selection Coefficient Slider", settings[3])
+    dpg.set_value("Probability of Mutation Slider", settings[4])
+    dpg.set_value("Log Cycle Slider", settings[5])
+    dpg.set_item_label("Mode of Visualisation", settings[6])
+    dpg.set_item_label("Transition Mode", settings[7])
+
+
 def get_item_values():
+    settings.clear()
     num_of_generations = dpg.get_value("Number of Generations Slider")
+    settings.append(num_of_generations)
     num_of_individuals = dpg.get_value("Number of Individuals Slider")
+    settings.append(num_of_individuals)
     gens_mutation = round(dpg.get_value("Gens Mutation Slider"), 3)
+    settings.append(gens_mutation)
     selection_coefficient = round(dpg.get_value("Selection Coefficient Slider"), 3)
+    settings.append(selection_coefficient)
     probability_of_mutation = round(dpg.get_value("Probability of Mutation Slider"), 3)
+    settings.append(probability_of_mutation)
     log_cycle = dpg.get_value("Log Cycle Slider")
+    settings.append(log_cycle)
+    mode = dpg.get_item_label("Mode of Visualisation")
+    settings.append(mode)
+    transition_mode = dpg.get_item_label("Transition Mode")
+    settings.append(transition_mode)
 
     print(num_of_generations)
     print(num_of_individuals)
+    print(gens_mutation)
     print(selection_coefficient)
     print(probability_of_mutation)
-    print(gens_mutation)
     print(log_cycle)
+    print(mode)
+    print(transition_mode)
+    print(settings)
 
 
 def to_primary_window():
     if dpg.does_item_exist("Window2"):
+        settings.clear()
         dpg.delete_item("Window2")
     if dpg.does_item_exist("Help Window"):
         dpg.delete_item("Help Window")
@@ -78,6 +140,7 @@ def to_primary_window():
 
 def to_help_window():
     if dpg.does_item_exist("Window2"):
+        get_item_values()
         dpg.delete_item("Window2")
     with dpg.window(tag="Help Window", label="Help Menu", width=620, height=500):
         dpg.add_text(
@@ -140,6 +203,13 @@ def to_alg_window():
             height=20,
             callback=to_help_window
         )
+        dpg.add_button(
+            label="Reset",
+            pos=(260, 430),
+            width=100,
+            height=20,
+            callback=reset_settings
+        )
         dpg.add_slider_float(
             tag="Gens Mutation Slider",
             label="Gens Mutation",
@@ -194,29 +264,39 @@ def to_alg_window():
             width=180,
             height=30
         )
-        # Иттерационное отображение алгоритма или сразу в конец
-        dpg.add_button(
-            label="I/E",
-            pos=(80, 50),
-            width=120,
-            height=30
+        dpg.add_text(
+            "Mode of Visualisation",
+            pos=(140, 55)
         )
-        # Слайдшоу или переход от иттерации по кнопке
         dpg.add_button(
-            label="B/S",
-            pos=(80, 90),
+            tag="Mode of Visualisation",
+            label="Iterable",
+            pos=(10, 50),
             width=120,
-            height=30
+            height=30,
+            callback=change_mode
+        )
+        dpg.add_text(
+            "Transition Mode",
+            pos=(140, 95)
+        )
+        dpg.add_button(
+            tag="Transition Mode",
+            label="Button",
+            pos=(10, 90),
+            width=120,
+            height=30,
+            callback=change_transition_mode
         )
 
         with dpg.plot(label="Algorithm Graphic", height=470, width=600, pos=(370, 20)):
             dpg.add_plot_axis(
-                dpg.mvXAxis, 
+                dpg.mvXAxis,
                 label="Generation"
             )
             dpg.add_plot_axis(
-                dpg.mvYAxis, 
-                label="Tree Weight", 
+                dpg.mvYAxis,
+                label="Tree Weight",
                 tag="y_axis"
             )
             for i in range(0, 20):
@@ -227,13 +307,16 @@ def to_alg_window():
                     callback=graphic_usage
                 )
             dpg.add_line_series(
-                sindatax, 
-                sindatay, 
+                sindatax,
+                sindatay,
                 parent="y_axis"
             )
         dpg.set_viewport_height(550)
         dpg.set_viewport_width(1000)
         dpg.set_primary_window("Window2", True)
+
+    if settings:
+        set_item_values()
 
 
 dpg.create_context()
