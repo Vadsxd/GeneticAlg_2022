@@ -10,8 +10,8 @@
 
 import random
 from dataclasses import dataclass
-import individual
-from copy import copy
+from individual import Individual
+
 
 
 @dataclass
@@ -23,8 +23,8 @@ class MutationInd:
         mutant - мутировавшее состояние особи.
         norm_indiv - нормальное (без мутации) состояние особи.
     """
-    mutant: 'Individual'
-    norm_indiv: 'Individual'
+    mutant: Individual
+    norm_indiv: Individual
 
 
 def gen_mutations(individuals, probability_of_mutation, gens_mutation, num_of_gens):
@@ -76,22 +76,22 @@ def mutate(individual, prob, num_of_gens):
     особь и нормальную
     """
 
-    # создаем клона
-    clon_ind = copy(individual)
+    new_gen_code = individual.gen_code
 
-    # мутируем клона
+    # мутируем ген. код особи
     mask = 1
     for i in range(num_of_gens):
         event = random.uniform(0., 1.)
         if event <= prob:
             # прибавить к гену 1 по модулю 2
-            clon_ind.gen_code = clon_ind.gen_code ^ mask
+            new_gen_code = new_gen_code ^ mask
         mask = mask << 1
 
-    clon_ind.fitness = None
+    # создаем новую особь по мут. коду
+    mutant = Individual(new_gen_code)
 
     # создаем объект MutationInd
-    mut_indiv = MutationInd(norm_indiv=individual, mutant=clon_ind)
+    mut_indiv = MutationInd(norm_indiv=individual, mutant=mutant)
 
     return mut_indiv
 

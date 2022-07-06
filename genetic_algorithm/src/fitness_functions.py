@@ -25,13 +25,12 @@ def fitness_function(individual, init_graph, epsilon):
     init_graph - граф
     epsilon - малое положительное значение
     """
-    graph = individual_to_graph(individual.gen_code, init_graph)
-    individual.graph = graph
-    answer = 1 / tree_cost(graph, init_graph)
+
+    answer = 1 / tree_cost(individual.graph, init_graph)
     if answer == 0:
         answer += epsilon
     n = len(init_graph)
-    num_edges = get_number_of_edges(graph)
+    num_edges = get_number_of_edges(individual.graph)
     answer -= 2 * epsilon * abs(num_edges - n + 1) / (abs(n ** 2 - 3 * n + 2))
     return answer
 

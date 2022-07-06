@@ -17,11 +17,11 @@ graph = create_full_graph(17)
 min_weight = weight_of_min_tree(graph)  # работает на основе модуля scipy
 
 ga = GA(convergence=0, num_of_individuals=100, selection_coefficient=0.2, probability_of_mutation=0.05, \
-	gens_mutation=0.1, num_of_generations=6500, graph=graph, reproduction=rf.panmixia_reproduction,\
+	gens_mutation=0.1, num_of_generations=1000, graph=graph, reproduction=rf.panmixia_reproduction,\
 	mutations=mf.gen_mutations, selection=sf.elite_selection, fitness=ff.fitness_function)
 ga.run()
 print("Вес минимального остовного дерева:", min_weight)
-print("Наилучшее значение фитнес-функции:", 1 / min_weight)
+print("Значение фитнес-функции истинного мин. ост. дерева:", 1 / min_weight)
 
 
 

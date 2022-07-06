@@ -60,6 +60,8 @@ class GA:
 
         # установка значения аттрибута класса Individual
         Individual._len_gen_code = self.num_of_edges
+        Individual._initial_graph = self.graph
+
 
 
 
