@@ -7,7 +7,8 @@
 import ga_functions as gen_algf
 import graph_functions as gf
 from individual import *
-
+from copy import copy
+from typing import Optional
 
 class GA:
     """
@@ -36,7 +37,7 @@ class GA:
 
         graph - граф, минимальное остовное дерево которого надо найти
 
-        reproduction, mutations, selection, fitness - функции кроссовера,
+        reproduction, mutation, selection, fitness - функции кроссовера,
         мутации, отбора и фитнеса.
         """
 
@@ -47,14 +48,15 @@ class GA:
         self.num_of_generations = num_of_generations
         self.graph = graph
         self.reproduction = reproduction
-        self.mutations = mutations
+        self.mutation = mutations
         self.selection = selection
         self.fitness = fitness
         self.num_of_edges = gf.get_number_of_edges(graph)
         self.epsilon = 1 / gf.get_sum_of_edges(graph)
         self.convergence = convergence
 
-        self.answer = None
+        # итоговый ответ ГА, будет None пока работает ГА
+        self.answer = None  # type: Optional[Individual]
 
         # установка значения аттрибута класса Individual
         Individual._len_gen_code = self.num_of_edges
@@ -71,8 +73,7 @@ class GA:
                 gen_algf.log(individuals, generation)
 
             # проверка на сходимость
-            gen_codes = [indiv.gen_code for indiv in individuals]
-            if len(list(set(gen_codes))) <= self.convergence:
+            if self._check_convergence(individuals):
                 gen_algf.log(individuals, generation)
                 break
 
@@ -83,8 +84,10 @@ class GA:
 
             # объединение потомков с родителями и произведение мутаций
             individuals += new_individuals
-            mutants = self.mutations(individuals, self.probability_of_mutation, \
+            mutations = self.mutation(individuals, self.probability_of_mutation, \
                                      self.gens_mutation, self.num_of_edges)
+
+            mutants = [mutation.mutant for mutation in mutations]
 
             # пересчет значений фитнес ф-и для ф-и для мутантов
             gen_algf.assign_fitness(mutants, self.graph, self.fitness, self.epsilon)
@@ -95,44 +98,74 @@ class GA:
 
 
     def run_by_step(self):
-        result_step = {'step': 0, 'childes': [], 'mutants': [], 'new_population': []}
+        """
+        Генератор пошагово выполнения ГА. При каждом вызове создает новое поколение
+        и возвращает информацию об этапах создания этого поколения.
+
+        ------Алгоритм создания нового поколения-----
+            1. Берем за основу популяцию пред. поколения.
+            2. Создаем потомков (кроссинговер) на основе этой популяции и добавляем их в текущую популяцию.
+            3. Производим мут-ю некоторых особей во всей популяции (мут-я может происходить как с родителями, так и с потомками)
+            4. Осуществляем селекцию (отбор из образованного мн-ва особей).
+
+        -------return-----
+        Словарь, в котором есть след. ключи:
+            'step' - номер поколения или шага алгоритма.
+            'childes' - список потомков (класс Individual) после кроссинговера.
+            'mutations' - список мутаций (класс MutationInd), каждый элемент списка содержит поле:
+                 * mutant - мутировавшее состояние особи
+                 * norm_indiv - норм. состояние особи.
+            'new_population' - итоговая популяция данного поколения (результат этапа отбора)
+
+        !!!!!!!Примечание!!!!!!!!
+            1. Когда алгоритм сходится (или достигает заданного кол-ва поколений), вызывается исключение StopIteration.
+        Итоговый ответ на задачу (лучшая особь) заносится в поле self.answer
+            2. На первой итерации (step = 0) возвращаться словарь, у которого будет заполнен только список 'new_population',
+        так как при старте начальная популяция создается случайно.
+        """
+        result_step = {'step': 0, 'childes': [], 'mutations': [], 'new_population': []}
 
         # создание случайной популяции
         individuals = gen_algf.create_individuals(self.num_of_edges, self.num_of_individuals)
         gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
 
-        result_step['new_population'] = individuals
+        # вывод 0-ого шага
+        result_step['new_population'] = copy(individuals)
         yield result_step
 
         for generation in range(1, self.num_of_generations+1):
             result_step['step'] = generation
 
             # проверка на сходимость
-            gen_codes = [indiv.gen_code for indiv in individuals]
-            if len(list(set(gen_codes))) <= self.convergence:
-                gen_algf.log(individuals, generation)
+            if self._check_convergence(individuals):
                 break
 
             # запуск кроссовера
             new_individuals = self.reproduction(individuals, self.num_of_edges)
             gen_algf.assign_fitness(new_individuals, self.graph, self.fitness, self.epsilon)
-            result_step['childes'] = new_individuals
+            result_step['childes'] = new_individuals  # возможно нужен copy
 
             # объединение потомков с родителями и произведение мутаций
             individuals += new_individuals
-            mutants = self.mutations(individuals, self.probability_of_mutation, \
+            mutations = self.mutation(individuals, self.probability_of_mutation, \
                                      self.gens_mutation, self.num_of_edges)
 
-            # пересчет значений фитнес ф-и для ф-и для мутантов
+            mutants = [mutation.mutant for mutation in mutations]
+
+            # пересчет значений фитнес ф-и для мутантов
             gen_algf.assign_fitness(mutants, self.graph, self.fitness, self.epsilon)
-            result_step['mutants'] = mutants
+            result_step['mutants'] = mutations
 
             # отбор особей в новую популяцию
             individuals = self.selection(individuals, self.num_of_individuals, \
                                          self.selection_coefficient)
-            result_step['new_population'] = individuals
+            result_step['new_population'] = copy(individuals)
 
             yield result_step
 
         # сохранение ответа
         self.answer = max(individuals, key=lambda ind: ind.fitness)
+
+    def _check_convergence(self, individuals):
+        gen_codes = [indiv.gen_code for indiv in individuals]
+        return len(list(set(gen_codes))) <= self.convergence
