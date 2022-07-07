@@ -1,0 +1,19 @@
+import graphviz
+from typing import List
+
+
+def draw_graph(graph_list: List, names_vertexes, out_path: str):
+    view_graph = graphviz.Graph(strict=True)
+    view_graph.attr('node', shape='circle')
+
+    # создаем вершины
+    for vert_ind in range(len(graph_list)):
+        view_graph.node(str(names_vertexes[vert_ind]))
+
+    # создаем ребра
+    for vert1_ind, list_edges in enumerate(graph_list):
+        for edges, vert2_ind in list_edges:
+            view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str(edges))
+
+
+    view_graph.render(engine='circo', outfile=out_path)

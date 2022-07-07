@@ -24,8 +24,5 @@ class Individual:
         return self.str_gen_code()
 
 
-#class Descendant(Individual):
-
-
 
 

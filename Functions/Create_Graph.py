@@ -1,8 +1,10 @@
 import dearpygui.dearpygui as dpg
 import easygui
-
+from Graphviz.draw_graph import draw_graph
 
 saved_image = []
+graph = []
+names_vertexes = []
 
 
 # for button "Upload Graph"
@@ -14,15 +16,31 @@ def upload_graph():
 
 # for button "Add"
 def update_graph():
-    vertex_1 = dpg.get_value("Ver1")
-    vertex_2 = dpg.get_value("Ver2")
+    vert_name_1 = dpg.get_value("Ver1")
+    vert_name_2 = dpg.get_value("Ver2")
     weight = dpg.get_value("Weight")
-    print(vertex_1)
-    print(vertex_2)
+    print(vert_name_1)
+    print(vert_name_2)
     print(weight)
 
+    if vert_name_1 not in names_vertexes:
+        names_vertexes.append(vert_name_1)
+        graph.append([])
+
+    if vert_name_2 not in names_vertexes:
+        names_vertexes.append(vert_name_2)
+        graph.append([])
+
+    ind_vert1 = names_vertexes.index(vert_name_1)
+    ind_vert2 = names_vertexes.index(vert_name_2)
+
+    graph[ind_vert1].append((weight, ind_vert2))
+    graph[ind_vert2].append((weight, ind_vert1))
+
+    draw_graph(graph, names_vertexes, out_path='.tmp_graph.png')
+
     saved_image.clear()
-    width, height, channels, data = dpg.load_image("pibs.png")
+    width, height, channels, data = dpg.load_image(".tmp_graph.png")
     saved_image.extend([width, height, channels, data])
 
     dpg.set_value("texture_tag", data)

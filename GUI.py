@@ -251,7 +251,7 @@ def to_create_graph():
         get_item_values()
         dpg.delete_item("Window2")
 
-    width, height, channels, data = dpg.load_image("bear.png")
+    width, height, channels, data = dpg.load_image(".tmp_graph.png")
 
     # если изображение графа сохранялось, то загрузится оно, иначе дефолтная картинка
     if saved_image:
