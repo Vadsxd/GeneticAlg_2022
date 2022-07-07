@@ -40,10 +40,33 @@ def update_graph():
     draw_graph(graph, names_vertexes, out_path='.tmp_graph.png')
 
     saved_image.clear()
-    width, height, channels, data = dpg.load_image(".tmp_graph.png")
+    width, height, channels, data = dpg.load_image('.tmp_graph.png')
     saved_image.extend([width, height, channels, data])
 
+    dpg.set_item_width("texture_tag", width)
+    dpg.set_item_height("texture_tag", height)
     dpg.set_value("texture_tag", data)
+
+    if dpg.does_item_exist("img"):
+        dpg.delete_item("img")
+
+    if dpg.does_item_exist("texture_tag"):
+        dpg.delete_item("texture_tag")
+
+    dpg.add_dynamic_texture(
+        width=saved_image[0],
+        height=saved_image[1],
+        default_value=saved_image[3],
+        tag="texture_tag",
+        parent="registry"
+    )
+
+    dpg.add_image(
+        "texture_tag",
+        tag="img",
+        pos=(500, 10),
+        parent="Create Window"
+    )
 
 
 # for button "Delete Vertex"
