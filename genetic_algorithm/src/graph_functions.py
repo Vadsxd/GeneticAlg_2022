@@ -27,7 +27,15 @@ def create_full_graph(n, a=1, b=25):
     a - достижимая нижняя граница веса ребра
     b - достижимая верхняя граница веса ребра
     """
-    return [[(random.randint(a, b), j) for j in list(range(i)) + list(range(i+1, n))] for i in range(n)]
+    graph = [[] for i in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if i >= j:
+                continue
+            weight = random.randint(a, b)
+            graph[i].append((weight, j))
+            graph[j].append((weight, i))
+    return graph
 
 
 def individual_to_graph(individual_code, init_graph):
