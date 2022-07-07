@@ -2,7 +2,8 @@ import dearpygui.dearpygui as dpg
 from Functions.Primary_Window import end_prog
 from Functions.Algorithm_Window import change_mode, change_transition_mode, graphic_usage, start_algorithm, \
     reset_settings, get_item_values, settings, set_item_values
-from Functions.Create_Graph import update_graph, upload_graph, delete_vertex, delete_edge, saved_image
+from Functions.Create_Graph import update_graph, upload_graph, delete_vertex, delete_edge, saved_image, graph, \
+    names_vertexes
 
 
 def to_primary_window():
@@ -15,8 +16,10 @@ def to_primary_window():
 
     if dpg.does_item_exist("Create Window"):
         saved_image.clear()
-        dpg.delete_item("registry")
+        graph.clear()
+        names_vertexes.clear()
         dpg.delete_item("Create Window")
+        dpg.delete_item("registry")
 
     with dpg.window(tag="Primary Window", label="Greeting Window", width=620, height=350):
         dpg.add_text(
@@ -251,7 +254,7 @@ def to_create_graph():
         get_item_values()
         dpg.delete_item("Window2")
 
-    width, height, channels, data = dpg.load_image(".tmp_graph.png")
+    width, height, channels, data = dpg.load_image('.tmp_graph.png')
 
     # если изображение графа сохранялось, то загрузится оно, иначе дефолтная картинка
     if saved_image:
