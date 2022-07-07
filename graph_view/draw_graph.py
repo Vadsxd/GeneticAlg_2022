@@ -2,7 +2,7 @@ import graphviz
 from typing import List
 
 
-def draw_graph(graph_list: List, names_vertexes, out_path: str):
+def graph_to_png(graph_list: List, names_vertexes, out_path: str):
     view_graph = graphviz.Graph(strict=True)
     view_graph.attr('node', shape='circle')
 
@@ -13,7 +13,11 @@ def draw_graph(graph_list: List, names_vertexes, out_path: str):
     # создаем ребра
     for vert1_ind, list_edges in enumerate(graph_list):
         for edges, vert2_ind in list_edges:
-            view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str(edges))
+            view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str(edges), color='gray')
+
+    view_graph.render(engine='fdp', outfile=out_path)
 
 
-    view_graph.render(engine='circo', outfile=out_path)
+def create_png_file(path: str):
+    view_graph = graphviz.Graph()
+    view_graph.render(outfile=path)
