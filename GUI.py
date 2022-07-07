@@ -1,97 +1,23 @@
 import dearpygui.dearpygui as dpg
-
-settings = []
-
-
-def end_prog():
-    exit(0)
-
-
-def graphic_usage():
-    print(1)
-
-
-def change_mode():
-    if dpg.get_item_label("Mode of Visualisation") == "To End":
-        dpg.set_item_label("Mode of Visualisation", "Iterable")
-    else:
-        dpg.set_item_label("Mode of Visualisation", "To End")
-
-
-def change_transition_mode():
-    if dpg.get_item_label("Transition Mode") == "Button":
-        dpg.set_item_label("Transition Mode", "SlideShow")
-    else:
-        dpg.set_item_label("Transition Mode", "Button")
-
-
-def reset_settings():
-    settings.clear()
-    dpg.set_value("Number of Generations Slider", 1000)
-    settings.append(1000)
-    dpg.set_value("Number of Individuals Slider", 100)
-    settings.append(100)
-    dpg.set_value("Gens Mutation Slider", 0.1)
-    settings.append(0.1)
-    dpg.set_value("Selection Coefficient Slider", 0.1)
-    settings.append(0.1)
-    dpg.set_value("Probability of Mutation Slider", 0.05)
-    settings.append(0.05)
-    dpg.set_value("Log Cycle Slider", 50)
-    settings.append(50)
-    dpg.set_item_label("Mode of Visualisation", "Iterable")
-    settings.append("Iterable")
-    dpg.set_item_label("Transition Mode", "Button")
-    settings.append("Button")
-
-
-def set_item_values():
-    dpg.set_value("Number of Generations Slider", settings[0])
-    dpg.set_value("Number of Individuals Slider", settings[1])
-    dpg.set_value("Gens Mutation Slider", settings[2])
-    dpg.set_value("Selection Coefficient Slider", settings[3])
-    dpg.set_value("Probability of Mutation Slider", settings[4])
-    dpg.set_value("Log Cycle Slider", settings[5])
-    dpg.set_item_label("Mode of Visualisation", settings[6])
-    dpg.set_item_label("Transition Mode", settings[7])
-
-
-def get_item_values():
-    settings.clear()
-    num_of_generations = dpg.get_value("Number of Generations Slider")
-    settings.append(num_of_generations)
-    num_of_individuals = dpg.get_value("Number of Individuals Slider")
-    settings.append(num_of_individuals)
-    gens_mutation = round(dpg.get_value("Gens Mutation Slider"), 3)
-    settings.append(gens_mutation)
-    selection_coefficient = round(dpg.get_value("Selection Coefficient Slider"), 3)
-    settings.append(selection_coefficient)
-    probability_of_mutation = round(dpg.get_value("Probability of Mutation Slider"), 3)
-    settings.append(probability_of_mutation)
-    log_cycle = dpg.get_value("Log Cycle Slider")
-    settings.append(log_cycle)
-    mode = dpg.get_item_label("Mode of Visualisation")
-    settings.append(mode)
-    transition_mode = dpg.get_item_label("Transition Mode")
-    settings.append(transition_mode)
-
-    print(num_of_generations)
-    print(num_of_individuals)
-    print(gens_mutation)
-    print(selection_coefficient)
-    print(probability_of_mutation)
-    print(log_cycle)
-    print(mode)
-    print(transition_mode)
-    print(settings)
+from Functions.Primary_Window import end_prog
+from Functions.Algorithm_Window import change_mode, change_transition_mode, graphic_usage, start_algorithm, \
+    reset_settings, get_item_values, settings, set_item_values
+from Functions.Create_Graph import update_graph, upload_graph, delete_vertex, delete_edge, saved_image
 
 
 def to_primary_window():
     if dpg.does_item_exist("Window2"):
         settings.clear()
         dpg.delete_item("Window2")
+
     if dpg.does_item_exist("Help Window"):
         dpg.delete_item("Help Window")
+
+    if dpg.does_item_exist("Create Window"):
+        saved_image.clear()
+        dpg.delete_item("registry")
+        dpg.delete_item("Create Window")
+
     with dpg.window(tag="Primary Window", label="Greeting Window", width=620, height=350):
         dpg.add_text(
             "Greetings Dear User!",
@@ -115,23 +41,17 @@ def to_primary_window():
         )
         dpg.add_button(
             label="Exit Program",
-            pos=(490, 260),
+            pos=(480, 260),
             width=100,
             height=30,
             callback=end_prog
         )
         dpg.add_button(
-            label="Upload Graph",
-            pos=(120, 260),
-            width=100,
-            height=30
-        )
-        dpg.add_button(
             label="Create Graph",
-            pos=(10, 260),
+            pos=(20, 260),
             width=100,
             height=30,
-            callback=to_alg_window
+            callback=to_create_graph
         )
     dpg.set_viewport_height(350)
     dpg.set_viewport_width(620)
@@ -142,6 +62,7 @@ def to_help_window():
     if dpg.does_item_exist("Window2"):
         get_item_values()
         dpg.delete_item("Window2")
+
     with dpg.window(tag="Help Window", label="Help Menu", width=620, height=500):
         dpg.add_text(
             "This page can help you :)",
@@ -162,8 +83,11 @@ def to_help_window():
 def to_alg_window():
     if dpg.does_item_exist("Help Window"):
         dpg.delete_item("Help Window")
-    if dpg.does_item_exist("Primary Window"):
-        dpg.delete_item("Primary Window")
+
+    if dpg.does_item_exist("Create Window"):
+        dpg.delete_item("registry")
+        dpg.delete_item("Create Window")
+
     sindatax = []
     sindatay = []
     for i in range(0, 20):
@@ -181,14 +105,14 @@ def to_alg_window():
             pos=(260, 460),
             width=100,
             height=30,
-            callback=to_primary_window
+            callback=to_create_graph
         )
         dpg.add_button(
             label="Start Algorithm",
             pos=(10, 460),
             width=120,
             height=30,
-            callback=get_item_values
+            callback=start_algorithm
         )
         dpg.add_button(
             label="Stop Algorithm",
@@ -317,6 +241,135 @@ def to_alg_window():
 
     if settings:
         set_item_values()
+
+
+def to_create_graph():
+    if dpg.does_item_exist("Primary Window"):
+        dpg.delete_item("Primary Window")
+
+    if dpg.does_item_exist("Window2"):
+        get_item_values()
+        dpg.delete_item("Window2")
+
+    width, height, channels, data = dpg.load_image("bear.png")
+
+    # если изображение графа сохранялось, то загрузится оно, иначе дефолтная картинка
+    if saved_image:
+        with dpg.texture_registry(tag="registry"):
+            dpg.add_dynamic_texture(
+                width=saved_image[0],
+                height=saved_image[1],
+                default_value=saved_image[3],
+                tag="texture_tag"
+            )
+    else:
+        with dpg.texture_registry(tag="registry"):
+            dpg.add_dynamic_texture(
+                width=width,
+                height=height,
+                default_value=data,
+                tag="texture_tag"
+            )
+
+    with dpg.window(tag="Create Window", label="Graph Menu", width=1000, height=550):
+        dpg.add_button(
+            label="Back",
+            pos=(260, 460),
+            width=100,
+            height=30,
+            callback=to_primary_window
+        )
+        dpg.add_button(
+            label="Finish",
+            pos=(10, 460),
+            width=120,
+            height=30,
+            callback=to_alg_window
+        )
+        dpg.add_button(
+            label="Upload Graph",
+            pos=(260, 420),
+            width=100,
+            height=30,
+            callback=upload_graph
+        )
+        dpg.add_input_int(
+            tag="Ver1",
+            label="Vertex 1",
+            pos=(10, 20),
+            width=100,
+            min_value=0,
+            min_clamped=True
+        )
+        dpg.add_input_int(
+            tag="Ver2",
+            label="Vertex 2",
+            pos=(10, 60),
+            width=100,
+            min_value=0,
+            min_clamped=True
+        )
+        dpg.add_input_int(
+            tag="Weight",
+            label="Weight of Edge",
+            pos=(10, 100),
+            width=100,
+            min_value=0,
+            min_clamped=True
+        )
+        dpg.add_button(
+            label="Add",
+            pos=(260, 55),
+            width=100,
+            height=30,
+            callback=update_graph
+        )
+        dpg.add_input_int(
+            tag="DelVer",
+            label="Vertex to Delete",
+            pos=(10, 180),
+            width=100,
+            min_value=0,
+            min_clamped=True
+        )
+        dpg.add_button(
+            label="Delete Vertex",
+            pos=(260, 175),
+            width=100,
+            height=30,
+            callback=delete_vertex
+        )
+        dpg.add_input_int(
+            tag="EdVer1",
+            label="Vertex 1",
+            pos=(10, 260),
+            width=100,
+            min_value=0,
+            min_clamped=True
+        )
+        dpg.add_input_int(
+            tag="EdVer2",
+            label="Vertex 2",
+            pos=(10, 300),
+            width=100,
+            min_value=0,
+            min_clamped=True
+        )
+        dpg.add_button(
+            label="Delete Edge",
+            pos=(260, 280),
+            width=100,
+            height=30,
+            callback=delete_edge
+        )
+        dpg.add_image(
+            "texture_tag",
+            tag="img",
+            pos=(500, 10)
+        )
+        dpg.set_viewport_height(550)
+        dpg.set_viewport_width(1000)
+        dpg.set_primary_window("Create Window", True)
 
 
 dpg.create_context()
