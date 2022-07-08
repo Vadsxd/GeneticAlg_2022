@@ -1,8 +1,11 @@
 import dearpygui.dearpygui as dpg
 from windows.alg_win.event_handlers import get_item_values
-from windows.create_graph_win.event_handlers import update_graph, upload_graph, delete_vertex, delete_edge, saved_image
+from windows.create_graph_win.event_handlers import update_graph, upload_graph, delete_vertex, delete_edge, handler_button_back
 from windows.alg_win.alg_window import to_alg_window
 import windows.primary_win.primary_window as primary_window
+
+from graph_view.png_func import create_empty_png_file
+import os.path
 
 
 def to_create_graph():
@@ -13,25 +16,23 @@ def to_create_graph():
         get_item_values()
         dpg.delete_item("Window2")
 
-    width, height, channels, data = dpg.load_image('.tmp_graph.png')
-
-    # если изображение графа сохранялось, то загрузится оно, иначе дефолтная картинка
-    if saved_image:
-        with dpg.texture_registry(tag="registry"):
-            dpg.add_dynamic_texture(
-                width=saved_image[0],
-                height=saved_image[1],
-                default_value=saved_image[3],
-                tag="texture_tag"
-            )
+    # проверяем наличие файла '.tmp_graph.png'
+    if os.path.exists('.tmp_graph.png'):
+        width, height, channels, data = dpg.load_image('.tmp_graph.png')
     else:
-        with dpg.texture_registry(tag="registry"):
-            dpg.add_dynamic_texture(
-                width=width,
-                height=height,
-                default_value=data,
-                tag="texture_tag"
-            )
+        # создаем новый файл png
+        width = 255
+        height = 255
+        data = create_empty_png_file('.tmp_graph.png', width, height)
+
+    # создание дин. структуры
+    with dpg.texture_registry(tag="registry"):
+        dpg.add_dynamic_texture(
+            width=width,
+            height=height,
+            default_value=data,
+            tag="texture_tag"
+        )
 
     with dpg.window(tag="Create Window", label="Graph Menu", width=1000, height=550):
         dpg.add_button(
@@ -39,7 +40,7 @@ def to_create_graph():
             pos=(260, 460),
             width=100,
             height=30,
-            callback=primary_window.to_primary_window
+            callback=handler_button_back
         )
         dpg.add_button(
             label="Finish",
@@ -132,4 +133,3 @@ def to_create_graph():
         dpg.set_viewport_height(550)
         dpg.set_viewport_width(1000)
         dpg.set_primary_window("Create Window", True)
-

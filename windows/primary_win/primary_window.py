@@ -1,12 +1,12 @@
 import dearpygui.dearpygui as dpg
 from windows.alg_win.event_handlers import settings
-from windows.create_graph_win.event_handlers import saved_image, graph, \
-    names_vertexes
+from windows.create_graph_win.event_handlers import graph, names_vertexes
 from windows.primary_win.event_handlers import end_prog
 import windows.create_graph_win.create_graph_window as create_graph_win
 
+
 def to_primary_window():
-    if dpg.does_item_exist("Window2"):
+    if dpg.does_item_exist("Window2"):  # alg_win
         settings.clear()
         dpg.delete_item("Window2")
 
@@ -14,9 +14,6 @@ def to_primary_window():
         dpg.delete_item("Help Window")
 
     if dpg.does_item_exist("Create Window"):
-        saved_image.clear()
-        graph.clear()
-        names_vertexes.clear()
         dpg.delete_item("Create Window")
         dpg.delete_item("registry")
 
