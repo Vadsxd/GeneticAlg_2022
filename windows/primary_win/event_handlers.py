@@ -1,3 +1,6 @@
+import dearpygui.dearpygui as dpg
+
+
 # for button "Exit Program"
 def end_prog():
-    exit(0)
+    dpg.stop_dearpygui()
