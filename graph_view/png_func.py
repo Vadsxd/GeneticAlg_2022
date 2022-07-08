@@ -1,7 +1,7 @@
 import dearpygui.dearpygui as dpg
 
 
-def create_empty_png_file(path: str, width, height):
+def create_empty_png_file(path: str, width=255, height=255):
     data = []
     for i in range(width * height):
         data.append(0)  # R

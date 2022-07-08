@@ -1,8 +1,13 @@
 import graphviz
 from typing import List
-
+from graph_view.png_func import create_empty_png_file
 
 def graph_to_png(graph_list: List, names_vertexes, out_path: str):
+    # если нечего рисовать
+    if graph_list == []:
+        create_empty_png_file(out_path)
+        return
+
     view_graph = graphviz.Graph(strict=True)
     view_graph.attr('node', shape='circle')
 
@@ -18,6 +23,3 @@ def graph_to_png(graph_list: List, names_vertexes, out_path: str):
     view_graph.render(engine='fdp', outfile=out_path)
 
 
-def create_png_file(path: str):
-    view_graph = graphviz.Graph()
-    view_graph.render(outfile=path)
