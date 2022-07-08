@@ -12,6 +12,36 @@ from tkinter import Tk
 graph = []
 names_vertexes = []
 
+def handler_button_save():
+    if graph == []:
+        return
+
+    Tk().withdraw()  # не выводит левое окно
+    type_files = [("All files", "*.*"),
+                  ('Текст', '*.txt'),
+                   ('Изображение', '*.png')]
+    path = fd.asksaveasfilename(title="Сохранить как...", filetypes=type_files, defaultextension=".txt")
+
+    if path == '':
+        return
+
+    _, ext = os.path.splitext(path)
+    if ext not in [".txt", ".png"]:
+        msg.showerror(title="Ошибка", message='Файл должен быть только с разрешением .txt или .png')
+        return
+
+    if ext == ".png":
+        graph_to_png(graph, names_vertexes, out_path=path)
+        return
+
+    # если ".txt"
+    try:
+        with open(path, 'w') as file:
+            file.write(gr_func.graph_to_str(graph, names_vertexes))
+
+    except OSError:
+        msg.showerror(title="Ошибка", message='Не удалось создать файл')
+        return
 
 def handler_button_clear():
     graph.clear()
@@ -26,15 +56,15 @@ def handler_button_clear():
 def upload_graph():
     Tk().withdraw()  # не выводит левое окно
     path = fd.askopenfilename(title="Выберете файл",
-                              filetypes=(("Graph", "*.gr"), ("All files", "*.*"))
+                              filetypes=(("Текст", "*.txt"), ("All files", "*.*"))
                               , parent=None)
 
     if path == '':
         return
 
     _, ext = os.path.splitext(path)
-    if not ext == ".gr":
-        msg.showerror(title="Ошибка", message='Файл должен быть только с разрешением .gr')
+    if not ext == ".txt":
+        msg.showerror(title="Ошибка", message='Файл должен быть только с разрешением .txt')
         return
 
     try:
@@ -47,6 +77,8 @@ def upload_graph():
     except OSError:
         msg.showerror(title="Ошибка", message='Не удалось открыть файл')
         return
+
+    print(*graph, sep='\n')
 
     graph_to_png(graph, names_vertexes, out_path='.tmp_graph.png')
     _update_texture('.tmp_graph.png')
@@ -129,6 +161,9 @@ def _update_texture(path_to_png):
 
 
 def read_graph_from_file(file, graph, names_vertexes):
+    graph.clear()
+    names_vertexes.clear()
+
     try:
         for line in file:
             vert1_name, vert2_name, weight = map(int, line.split())
@@ -139,3 +174,5 @@ def read_graph_from_file(file, graph, names_vertexes):
 
     except Exception:
         return False
+
+

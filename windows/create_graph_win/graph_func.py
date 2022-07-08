@@ -1,4 +1,3 @@
-
 def add_edge(vert_name_1, vert_name_2, weight, graph, names_vertexes):
     # проверка на петли
     if vert_name_1 == vert_name_2:
@@ -86,3 +85,21 @@ def del_vert(graph, names_vertexes, vert_del_name):
                 list_edges[i] = (weight, some_vert_ind - 1)
 
             i = i + 1
+
+
+def graph_to_str(graph, names_vertexes):
+    edges = set()
+    string = ""
+
+    for vert1_ind, list_edges in enumerate(graph):
+        for weight, vert2_ind in list_edges:
+            v_max = max(vert2_ind, vert1_ind)
+            v_min = min(vert2_ind, vert1_ind)
+
+            edges.add(f"{v_min} {v_max} {weight}")
+
+    for edge in edges:
+        string += edge
+        string += '\n'
+
+    return string

@@ -34,6 +34,13 @@ def to_create_graph():
 
     with dpg.window(tag="Create Window", label="Graph Menu", width=1000, height=550):
         dpg.add_button(
+            label="Save",
+            pos=(260, 370),
+            width=100,
+            height=30,
+            callback=handler_button_save
+        )
+        dpg.add_button(
             label="Back",
             pos=(260, 460),
             width=100,
@@ -42,7 +49,7 @@ def to_create_graph():
         )
         dpg.add_button(
             label="Clear",
-            pos=(10, 350),
+            pos=(10, 370),
             width=100,
             height=30,
             callback=handler_button_clear
