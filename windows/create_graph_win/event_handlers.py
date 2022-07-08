@@ -3,7 +3,6 @@ from graph_view.draw_graph import graph_to_png, create_empty_png_file
 import os
 import windows.primary_win.primary_window as primary_window
 import os.path
-from windows.create_graph_win.reader import read_graph_from_file
 import windows.create_graph_win.graph_func as gr_func
 
 from tkinter import messagebox as msg
@@ -27,20 +26,20 @@ def handler_button_clear():
 def upload_graph():
     Tk().withdraw()  # не выводит левое окно
     path = fd.askopenfilename(title="Выберете файл",
-                              filetypes=(("Graph", "*.gv;*.txt"), ("All files", "*.*"))
+                              filetypes=(("Graph", "*.gr"), ("All files", "*.*"))
                               , parent=None)
 
     if path == '':
         return
 
     _, ext = os.path.splitext(path)
-    if ext not in [".txt", ".gv"]:
-        msg.showerror(title="Ошибка", message='Файл должен быть только с разрешением .txt или .gv')
+    if not ext == ".gr":
+        msg.showerror(title="Ошибка", message='Файл должен быть только с разрешением .gr')
         return
 
     try:
         with open(path, 'r') as file:
-            if not read_graph_from_file(file, ext, graph, names_vertexes):
+            if not read_graph_from_file(file, graph, names_vertexes):
                 msg.showerror(title="Ошибка",
                               message='Не удалось прочитать файл. Возможно некоторые данные в файле некорректные')
                 return
@@ -127,3 +126,16 @@ def _update_texture(path_to_png):
         pos=(500, 10),
         parent="Create Window"
     )
+
+
+def read_graph_from_file(file, graph, names_vertexes):
+    try:
+        for line in file:
+            vert1_name, vert2_name, weight = map(int, line.split())
+
+            gr_func.add_edge(vert1_name, vert2_name, weight, graph, names_vertexes)
+
+        return True
+
+    except Exception:
+        return False
