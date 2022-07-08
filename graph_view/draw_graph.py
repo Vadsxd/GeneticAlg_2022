@@ -18,7 +18,7 @@ def graph_to_png(graph_list: List, names_vertexes, out_path: str):
     # создаем ребра
     for vert1_ind, list_edges in enumerate(graph_list):
         for edges, vert2_ind in list_edges:
-            view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str(edges), color='gray')
+            view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str(edges))
 
     view_graph.render(engine='fdp', outfile=out_path)
 

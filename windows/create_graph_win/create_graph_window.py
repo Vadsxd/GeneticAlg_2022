@@ -1,11 +1,9 @@
 import dearpygui.dearpygui as dpg
 from windows.alg_win.event_handlers import get_item_values
-from windows.create_graph_win.event_handlers import update_graph, upload_graph, delete_vertex, handler_button_del_edge, handler_button_back
 from windows.alg_win.alg_window import to_alg_window
 
 from windows.create_graph_win.event_handlers import *
 from graph_view.png_func import create_empty_png_file
-
 
 
 def to_create_graph():
@@ -15,7 +13,6 @@ def to_create_graph():
     if dpg.does_item_exist("Window2"):
         get_item_values()
         dpg.delete_item("Window2")
-
 
     # проверяем задан ли граф
     if not graph:
@@ -44,6 +41,13 @@ def to_create_graph():
             callback=handler_button_back
         )
         dpg.add_button(
+            label="Clear",
+            pos=(10, 350),
+            width=100,
+            height=30,
+            callback=handler_button_clear
+        )
+        dpg.add_button(
             label="Finish",
             pos=(10, 460),
             width=120,
@@ -52,7 +56,7 @@ def to_create_graph():
         )
         dpg.add_button(
             label="Upload Graph",
-            pos=(260, 420),
+            pos=(145, 460),
             width=100,
             height=30,
             callback=upload_graph
