@@ -126,8 +126,6 @@ def handler_button_back():
     names_vertexes.clear()
     if os.path.exists('.tmp_graph.png'):
         os.remove('.tmp_graph.png')
-    if os.path.exists('.tmp_graph.gv'):
-        os.remove('.tmp_graph.gv')
     primary_window.to_primary_window()
 
 
@@ -166,6 +164,7 @@ def read_graph_from_file(file, graph, names_vertexes):
 
     try:
         for line in file:
+            if line == '\n': continue
             vert1_name, vert2_name, weight = map(int, line.split())
 
             gr_func.add_edge(vert1_name, vert2_name, weight, graph, names_vertexes)
