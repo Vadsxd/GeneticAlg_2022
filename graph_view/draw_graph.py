@@ -1,7 +1,8 @@
 import graphviz
 from typing import List
-from png_func import create_empty_png_file
+from graph_view.png_func import create_empty_png_file
 import os
+
 
 def graph_to_png(graph_list: List, names_vertexes, out_path: str):
     # если нечего рисовать
