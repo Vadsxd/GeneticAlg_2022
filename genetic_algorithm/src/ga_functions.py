@@ -5,6 +5,7 @@
 
 import random
 from individual import Individual
+import os.path
 
 
 def create_individuals(num_of_edges, num_of_individuals=100):
@@ -43,26 +44,39 @@ def assign_fitness(individuals, graph, fitness_func, epsilon):
             continue
         individuals[i].fitness = fitness_func(individuals[i], graph, epsilon)
 
-def log(individuals, generation_number):
+def log(individuals, generation_number, namefile=None):
     """
     Выводит информацию о переданных особях.
+    Если передан путь к файлу логов (может не существовать),
+    то информация записывается в него. Иначе логи выводятся
+    в консоль.
 
     ------Параметры------
     individuals - список особей
     generation_number - номер генерации
+    namefile - путь к файлу логов
     """
+    log_info = ""
     fitness_values = [indiv.fitness for indiv in individuals]
 
-    print("Номер генерации: ", generation_number)
-    print("Лучшее значение фитнес-функции: ", max(fitness_values))
+    log_info += "Номер генерации: " + str(generation_number) + "\n"
+    log_info += "Лучшее значение фитнес-функции: " + str(max(fitness_values)) + "\n"
 
     num_of_individuals = len(individuals)
     av_fitness = sum(fitness_values) / num_of_individuals
-    print("Среднее значение фитнес-функции: ", av_fitness)
-    print("Количество особей в популяции: ", len(individuals))
+    
+    log_info += "Среднее значение фитнес-функции: " + str(av_fitness) + "\n"
+    log_info += "Количество особей в популяции: " + str(len(individuals)) + "\n"
 
     gen_codes = [indiv.gen_code for indiv in individuals]
-    print("Количество уникальных генетических кодов:", len(list(set(gen_codes))))
-    print()
-
+    log_info += "Количество уникальных генетических кодов:" + str(len(list(set(gen_codes)))) + "\n"
+    log_info += "\n"
+    if not namefile:
+        print(log_info)
+    else:
+        mode = 'a'
+        if not os.path.exists(namefile):
+            mode = 'w'
+        with open(namefile, mode) as f:
+            f.write(log_info)
 

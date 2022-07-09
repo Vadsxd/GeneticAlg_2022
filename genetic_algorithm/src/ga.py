@@ -10,6 +10,7 @@ from individual import *
 from copy import copy
 from typing import Optional
 
+
 class GA:
     """
     Класс, реализующий инициализацию
@@ -99,7 +100,7 @@ class GA:
                                          self.selection_coefficient)
 
 
-    def run_by_step(self):
+    def run_by_step(self, path):
         """
         Генератор пошагово выполнения ГА. При каждом вызове создает новое поколение
         и возвращает информацию об этапах создания этого поколения.
@@ -136,6 +137,7 @@ class GA:
         yield result_step
 
         for generation in range(1, self.num_of_generations+1):
+            gen_algf.log(individuals, generation, path)
             result_step['step'] = generation
 
             # проверка на сходимость
