@@ -156,7 +156,7 @@ class GA:
 
             # пересчет значений фитнес ф-и для мутантов
             gen_algf.assign_fitness(mutants, self.graph, self.fitness, self.epsilon)
-            result_step['mutants'] = mutations
+            result_step['mutations'] = mutations
 
             # отбор особей в новую популяцию
             individuals = self.selection(individuals, self.num_of_individuals, \
