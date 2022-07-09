@@ -1,6 +1,5 @@
 import dearpygui.dearpygui as dpg
 from windows.alg_win.event_handlers import settings
-from windows.create_graph_win.event_handlers import graph, names_vertexes
 from windows.primary_win.event_handlers import end_prog
 import windows.create_graph_win.create_graph_window as create_graph_win
 

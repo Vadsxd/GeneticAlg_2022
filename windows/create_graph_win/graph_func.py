@@ -1,3 +1,5 @@
+from genetic_algorithm.src.graph_functions import depth_search
+
 def add_edge(vert_name_1, vert_name_2, weight, graph, names_vertexes):
     # проверка на петли
     if vert_name_1 == vert_name_2:
@@ -103,3 +105,16 @@ def graph_to_str(graph, names_vertexes):
         string += '\n'
 
     return string
+
+
+def is_connectivity_graph(graph):
+    n = len(graph)  # кол-во вершин
+
+    is_visited = [False] * n
+    visited_edges = 0
+    depth_search(graph, 0, is_visited, 0, visited_edges)
+
+    if False in is_visited:
+        return False
+    else:
+        return True

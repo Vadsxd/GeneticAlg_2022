@@ -4,6 +4,8 @@ import os
 import windows.primary_win.primary_window as primary_window
 import os.path
 import windows.create_graph_win.graph_func as gr_func
+import windows.alg_win.alg_window as alg_win
+
 
 from tkinter import messagebox as msg
 from tkinter import filedialog as fd
@@ -11,6 +13,21 @@ from tkinter import Tk
 
 graph = []
 names_vertexes = []
+
+
+def handler_button_finish():
+    Tk().withdraw()  # не выводит левое окно
+
+    if graph == []:
+        msg.showerror(title="Ошибка", message='Введите граф')
+        return
+
+    if not gr_func.is_connectivity_graph(graph):
+        msg.showerror(title="Ошибка", message='Граф должен быть связанный')
+        return
+
+    alg_win.to_alg_window()
+
 
 def handler_button_save():
     if graph == []:
