@@ -28,7 +28,7 @@ def handler_button_finish():
 
     # запретить resizable
     dpg.configure_viewport(0, resizable=False)
-    alg_win.to_alg_window()
+    alg_win.to_alg_window(graph, names_vertexes)
 
 
 def handler_button_save():

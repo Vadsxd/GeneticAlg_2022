@@ -5,7 +5,7 @@ from windows.alg_win.event_handlers import change_mode, change_transition_mode, 
 import windows.help_win.help_window as help_window
 import windows.create_graph_win.create_graph_window as create_graph_win
 
-def to_alg_window():
+def to_alg_window(graph, names_vertexes):
     if dpg.does_item_exist("Help Window"):
         dpg.delete_item("Help Window")
 
@@ -15,6 +15,7 @@ def to_alg_window():
 
     sindatax = []
     sindatay = []
+
     for i in range(0, 20):
         sindatax.append(i)
         sindatay.append(i * 2)
