@@ -1,7 +1,7 @@
 import dearpygui.dearpygui as dpg
 
 from windows.alg_win.event_handlers import get_item_values
-
+import windows.alg_win.alg_window as alg_win
 
 
 def to_help_window():
@@ -19,7 +19,7 @@ def to_help_window():
             pos=(490, 410),
             width=100,
             height=30,
-            callback=to_alg_window
+            callback=alg_win.to_alg_window
         )
     dpg.set_viewport_height(500)
     dpg.set_viewport_width(620)

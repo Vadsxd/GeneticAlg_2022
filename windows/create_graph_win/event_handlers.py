@@ -26,6 +26,8 @@ def handler_button_finish():
         msg.showerror(title="Ошибка", message='Граф должен быть связанный')
         return
 
+    # запретить resizable
+    dpg.configure_viewport(0, resizable=False)
     alg_win.to_alg_window()
 
 
@@ -139,6 +141,9 @@ def handler_button_del_edge():
 
 
 def handler_button_back():
+    # запретить resizable
+    dpg.configure_viewport(0, resizable=False)
+
     graph.clear()
     names_vertexes.clear()
     if os.path.exists('.tmp_graph.png'):
