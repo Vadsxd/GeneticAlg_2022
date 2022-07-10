@@ -138,9 +138,6 @@ class GA:
         # создание случайной популяции
         individuals = gen_algf.create_individuals(self.num_of_edges, self.num_of_individuals)
         gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
-
-        # вывод 0-ого шага
-        result_step['parents'] = individuals.copy()
         
         for generation in range(1, self.num_of_generations+1):
             gen_algf.log(individuals, generation, path)
@@ -148,26 +145,34 @@ class GA:
 
             # запуск кроссовера
             new_individuals = self.reproduction(individuals, self.num_of_edges)
-            gen_algf.assign_fitness(new_individuals, self.graph, self.fitness, self.epsilon)
-            result_step['childes'] = new_individuals.copy() 
+            gen_algf.assign_fitness(new_individuals, self.graph, self.fitness, self.epsilon) 
 
             # объединение потомков с родителями и произведение мутаций
             individuals += new_individuals
-            mutations = self.mutation(individuals, self.probability_of_mutation, \
+            self.mutation(individuals, self.probability_of_mutation, \
                                      self.gens_mutation, self.num_of_edges)
 
 
             # пересчет значений фитнес ф-и для мутантов
             gen_algf.assign_fitness(mutations, self.graph, self.fitness, self.epsilon)
-            result_step['mutants'] = mutations.copy()
 
+            childs, mutants, parents = [], [], []
+            for individual in individuals:
+                if individual.status == 'parent':
+                    parents.append(individual)
+                elif individual.status == 'child':
+                    childs.append(individual)
+                elif individual.status == 'mutant':
+                    mutants.append(individual)
+
+            result_step['childes'] = childs
+            result_step['mutants'] = mutants
+            result_step['parents'] = parents
+            yield result_step
+            
             # отбор особей в новую популяцию
             individuals = self.selection(individuals, self.num_of_individuals, \
                                          self.selection_coefficient)
-
-            yield result_step
-
-            result_step['parents'] = individuals.copy()
 
 
         # сохранение ответа
