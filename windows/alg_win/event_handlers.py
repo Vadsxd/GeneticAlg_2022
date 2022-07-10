@@ -6,6 +6,7 @@ from graph_view.draw_graph import individual_to_png
 import os
 from typing import List, Tuple, Dict
 
+ga_alg = None
 
 # for button "Iterable/To End"
 def change_mode():
@@ -39,10 +40,12 @@ def handler_button_stop():
         dpg.enable_item("Selection Coefficient Slider")
         dpg.enable_item("Probability of Mutation Slider")
 
+        dpg.enable_item("button_reset")
+
 
 # for button "Start Algorithm"
-def handler_button_start_alg(sender, app_data, param: Tuple[ga.GA, List, List, Dict]):
-    ga_alg, graph, names_vert, dict_name_indiv = param
+def handler_button_start_alg(sender, app_data, param: List):
+    graph, names_vert, dict_name_indiv = param
 
     get_item_values()  # заполнили settings
 
@@ -59,35 +62,62 @@ def handler_button_start_alg(sender, app_data, param: Tuple[ga.GA, List, List, D
     dpg.disable_item("Number of Individuals Slider")
     dpg.disable_item("Selection Coefficient Slider")
     dpg.disable_item("Probability of Mutation Slider")
-
-    ga_alg = ga.GA(*settings, graph)
+    dpg.disable_item("button_reset")
 
     # удаляем старый лог
     if os.path.exists(".log.txt"):
         os.remove(".log.txt")
 
+    global ga_alg
+    ga_alg = ga.GA(*settings, graph)
+
     # хрень полная
-    ga_alg.generator = ga_alg.create_generator(".log.txt")
+    ga_alg.generator = ga_alg.run_by_step(".log.txt")
+
+    handler_button_next(sender, app_data, (graph, names_vert, dict_name_indiv))
+
+
+
+
+def handler_button_next(sender, app_data, param):
+    graph, names_vert, dict_name_indiv = param
+
+    global ga_alg
 
     ga_step = next(ga_alg.generator)
 
-    data_listbox = []
+    dpg.set_item_label("listbox", "Generation: " + str(ga_step["step"]))
+
+    # именуем особи
     i = 1
-    for indiv in ga_step["new_population"]:
-        name = "Individual " + str(i)
+    for indiv in ga_step["parents"]:
+        name = "Parents " + str(i)
         dict_name_indiv[name] = indiv
-        data_listbox.append(name)
         i += 1
 
-    dpg.set_item_label("listbox", "Generation 0")
+    i = 1
+    for indiv in ga_step["childes"]:
+        name = "Child " + str(i)
+        dict_name_indiv[name] = indiv
+        i += 1
+
+    print(ga_step)
+
+    i = 1
+    for indiv in ga_step["mutants"]:
+        name = "Mutant " + str(i)
+        dict_name_indiv[name] = indiv
+        i += 1
+
+    # сортируем имена
+    tmp = sorted(dict_name_indiv.items(), key=lambda x: x[1].fitness, reverse=True)
+    data_listbox = [x[0] for x in tmp]
+
+    # обновляем listbox
     dpg.configure_item("listbox", items=data_listbox)
 
     # отобразить первую особь в списке
     handler_click_listbox("listbox", data_listbox[0], (graph, names_vert, dict_name_indiv))
-
-
-def handler_button_next():
-    pass
 
 
 def handler_button_reset():
@@ -126,6 +156,7 @@ def handler_click_listbox(sender, app_data, param):
     graph, names_vertexes, dict_name_indiv = param
     indiv = dict_name_indiv[app_data]
 
+    dpg.set_value("inf_indiv", f"Fitness value: {indiv.fitness}")
     individual_to_png(indiv, graph, names_vertexes, ".indiv.png")
     _update_texture(".indiv.png")
 

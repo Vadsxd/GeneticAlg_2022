@@ -7,6 +7,7 @@ from windows.alg_win.setting_func import *
 from graph_view.png_func import create_empty_png_file
 
 
+
 def to_alg_window(graph, names_vertexes):
     if dpg.does_item_exist("Help Window"):
         dpg.delete_item("Help Window")
@@ -15,7 +16,6 @@ def to_alg_window(graph, names_vertexes):
         dpg.delete_item("registry")
         dpg.delete_item("Create Window")
 
-    ga_alg = ga.GA()
     dict_name_indiv = {}
 
     # создаем новый файл png
@@ -34,6 +34,14 @@ def to_alg_window(graph, names_vertexes):
     with dpg.window(tag="Window2", label="Graph Menu", width=1000, height=550):
         dpg.add_listbox(items=[], label="Population", tag="listbox", callback=handler_click_listbox, width=270,
                         num_items=9, user_data=(graph, names_vertexes, dict_name_indiv))
+        dpg.add_text("", tag="inf_indiv", pos=(390, 10))
+        dpg.add_button(
+            label="To End",
+            pos=(260, 390),
+            width=100,
+            height=30,
+            #callback=handler_button_back
+        )
         dpg.add_button(
             label="Back",
             pos=(260, 460),
@@ -50,6 +58,7 @@ def to_alg_window(graph, names_vertexes):
             enabled=False,
             show=False,
             callback=handler_button_next,
+            user_data=(graph, names_vertexes, dict_name_indiv)
         )
         dpg.add_button(
             label="Start Algorithm",
@@ -58,7 +67,7 @@ def to_alg_window(graph, names_vertexes):
             width=120,
             height=30,
             callback=handler_button_start_alg,
-            user_data=(ga_alg, graph, names_vertexes, dict_name_indiv)
+            user_data=[graph, names_vertexes, dict_name_indiv]
         )
         dpg.add_button(
             label="Stop Algorithm",
@@ -76,6 +85,7 @@ def to_alg_window(graph, names_vertexes):
         )
         dpg.add_button(
             label="Reset",
+            tag = "button_reset",
             pos=(260, 430),
             width=100,
             height=20,
@@ -104,7 +114,8 @@ def to_alg_window(graph, names_vertexes):
             label="Number of Individuals",
             pos=(10, 270),
             default_value=100,
-            max_value=1000,
+            max_value=200,
+            min_value=10,
             width=180,
             height=30
         )
@@ -131,6 +142,7 @@ def to_alg_window(graph, names_vertexes):
             tag="indiv_img",
             pos=(390, 60)
         )
+
 
     dpg.set_viewport_height(550)
     dpg.set_viewport_width(1000)
