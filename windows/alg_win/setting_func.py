@@ -26,21 +26,21 @@ def reset_settings():
 # gets all values from sliders
 def get_item_values():
     settings.clear()
-    num_of_generations = dpg.get_value("Number of Generations Slider")
-    settings.append(num_of_generations)
     num_of_individuals = dpg.get_value("Number of Individuals Slider")
     settings.append(num_of_individuals)
-    gens_mutation = round(dpg.get_value("Gens Mutation Slider"), 3)
-    settings.append(gens_mutation)
+
     selection_coefficient = round(dpg.get_value("Selection Coefficient Slider"), 3)
     settings.append(selection_coefficient)
+
     probability_of_mutation = round(dpg.get_value("Probability of Mutation Slider"), 3)
     settings.append(probability_of_mutation)
-    log_cycle = dpg.get_value("Log Cycle Slider")
-    settings.append(log_cycle)
-    mode = dpg.get_item_label("Mode of Visualisation")
-    settings.append(mode)
-    transition_mode = dpg.get_item_label("Transition Mode")
+
+    gens_mutation = round(dpg.get_value("Gens Mutation Slider"), 3)
+    settings.append(gens_mutation)
+
+    num_of_generations = dpg.get_value("Number of Generations Slider")
+    settings.append(num_of_generations)
+
     settings.append(transition_mode)
 
 

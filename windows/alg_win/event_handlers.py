@@ -42,9 +42,7 @@ def handler_button_start_alg(sender, app_data, param: Tuple[ga.GA, List]):
     dpg.show_item("button_next_alg")
     dpg.enable_item("button_next_alg")
 
-    ga_alg = ga.GA(convergence=0, num_of_individuals=10, selection_coefficient=0.2, probability_of_mutation=0.05, \
-            gens_mutation=0.1, num_of_generations=1000, graph=graph, reproduction=rf.panmixia_reproduction, \
-            mutations=mf.gen_mutations, selection=sf.elite_selection, fitness=ff.fitness_function)
+    ga_alg = ga.GA()
 
     # удаляем старый лог
     if os.path.exists(".log.txt"):

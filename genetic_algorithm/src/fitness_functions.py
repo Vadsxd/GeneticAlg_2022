@@ -31,7 +31,8 @@ def fitness_function(individual, init_graph, epsilon):
         answer += epsilon
     n = len(init_graph)
     num_edges = get_number_of_edges(individual.graph)
-    answer -= 2 * epsilon * abs(num_edges - n + 1) / (abs(n ** 2 - 3 * n + 2))
+    if n >= 3:
+        answer -= 2 * epsilon * abs(num_edges - n + 1) / (abs(n ** 2 - 3 * n + 2))
     return answer
 
 

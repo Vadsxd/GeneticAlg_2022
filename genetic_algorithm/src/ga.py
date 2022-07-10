@@ -6,9 +6,14 @@
 
 import genetic_algorithm.src.ga_functions as gen_algf
 import genetic_algorithm.src.graph_functions as gf
+import reproduction_functions as rf 
+import mutations_functions as mf 
+import selection_functions as sf 
+import fitness_functions as ff 
 from genetic_algorithm.src.individual import *
 from copy import copy
 from typing import Optional
+
 
 
 class GA:
@@ -17,10 +22,10 @@ class GA:
     и запуск генетического алгоритма.
     """
 
-    def __init__(self, convergence=None, num_of_individuals=None, selection_coefficient=None, \
+    def __init__(self, num_of_individuals=None, selection_coefficient=None, \
                  probability_of_mutation=None, gens_mutation=None, \
-                 num_of_generations=None, graph=None, reproduction=None, \
-                 mutations=None, selection=None, fitness=None):
+                 num_of_generations=None, graph=None, reproduction=rf.panmixia_reproduction, \
+                 mutations=mf.gen_mutations, selection=sf.elite_selection, fitness=ff.fitness_function, convergence=0):
         """
         ------Параметры------
         convergence - кол-во уникальных особей, при достижении которого
