@@ -6,10 +6,10 @@
 
 import genetic_algorithm.src.ga_functions as gen_algf
 import genetic_algorithm.src.graph_functions as gf
-import genetic_algorithm.src.reproduction_functions as rf
-import genetic_algorithm.src.mutations_functions as mf
-import genetic_algorithm.src.selection_functions as sf
-import genetic_algorithm.src.fitness_functions as ff
+import reproduction_functions as rf 
+import mutations_functions as mf 
+import selection_functions as sf 
+import fitness_functions as ff 
 from genetic_algorithm.src.individual import *
 from copy import copy
 from typing import Optional
@@ -64,15 +64,13 @@ class GA:
         self.epsilon = 1 / gf.get_sum_of_edges(graph)
         self.convergence = convergence
 
-        # генератор
-        self.generator = None
-
         # итоговый ответ ГА, будет None пока работает ГА
         self.answer = None  # type: Optional[Individual]
 
         # установка значения аттрибута класса Individual
         Individual._len_gen_code = self.num_of_edges
         Individual._initial_graph = self.graph
+
 
 
 
@@ -110,7 +108,7 @@ class GA:
                                          self.selection_coefficient)
 
 
-    def create_generator(self, path):
+    def run_by_step(self, path):
         """
         Генератор пошагово выполнения ГА. При каждом вызове создает новое поколение
         и возвращает информацию об этапах создания этого поколения.
@@ -136,23 +134,18 @@ class GA:
             2. На первой итерации (step = 0) возвращаться словарь, у которого будет заполнен только список 'new_population',
         так как при старте начальная популяция создается случайно.
         """
-        result_step = {'step': 0, 'childes': [], 'mutations': [], 'new_population': []}
+        result_step = {'step': 0, 'childes': [], 'mutants': [], 'parents': []}
 
         # создание случайной популяции
         individuals = gen_algf.create_individuals(self.num_of_edges, self.num_of_individuals)
         gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
 
         # вывод 0-ого шага
-        result_step['new_population'] = copy(individuals)
-        yield result_step
-
+        result_step['parents'] = copy(individuals)
+        
         for generation in range(1, self.num_of_generations+1):
             gen_algf.log(individuals, generation, path)
             result_step['step'] = generation
-
-            # проверка на сходимость
-            if self._check_convergence(individuals):
-                break
 
             # запуск кроссовера
             new_individuals = self.reproduction(individuals, self.num_of_edges)
@@ -168,14 +161,16 @@ class GA:
 
             # пересчет значений фитнес ф-и для мутантов
             gen_algf.assign_fitness(mutants, self.graph, self.fitness, self.epsilon)
-            result_step['mutations'] = mutations
+            result_step['mutants'] = mutations
 
             # отбор особей в новую популяцию
             individuals = self.selection(individuals, self.num_of_individuals, \
                                          self.selection_coefficient)
-            result_step['new_population'] = copy(individuals)
 
             yield result_step
+
+            result_step['parents'] = copy(individuals)
+
 
         # сохранение ответа
         self.answer = max(individuals, key=lambda ind: ind.fitness)
@@ -183,3 +178,6 @@ class GA:
     def _check_convergence(self, individuals):
         gen_codes = [indiv.gen_code for indiv in individuals]
         return len(list(set(gen_codes))) <= self.convergence
+
+
+
