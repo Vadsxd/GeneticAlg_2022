@@ -64,7 +64,8 @@ def panmixia_reproduction(individuals, num_of_gens):
     for x in range(num_of_indiv):
         mask = random.randint(1, 2 ** (num_of_gens - 1))
         child = (individuals[x].gen_code & mask) + (individuals[y[x]].gen_code & (mask ^ ones))
-        new_individuals.append(Individual(child))
+        new_child = Individual(child)
+        new_child.status = "child"
+        new_individuals.append(new_child)
     return new_individuals
-
 
