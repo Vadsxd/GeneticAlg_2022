@@ -1,6 +1,16 @@
 import dearpygui.dearpygui as dpg
+from windows.alg_win.SeriesData import SeriesData
+import genetic_algorithm.src.ga as ga
+from windows.alg_win.setting_func import *
+import  windows.create_graph_win.create_graph_window as create_graph_win
 
-settings = []
+import genetic_algorithm.src.reproduction_functions as rf
+import genetic_algorithm.src.mutations_functions as mf
+import genetic_algorithm.src.selection_functions as sf
+import genetic_algorithm.src.fitness_functions as ff
+
+import os
+from typing import List, Tuple
 
 
 # for button "Iterable/To End"
@@ -19,75 +29,48 @@ def change_transition_mode():
         dpg.set_item_label("Transition Mode", "Button")
 
 
-# for dots on graphic
-def graphic_usage():
-    print(1)
-
-
 # for button "Start Algorithm"
-def start_algorithm():
-    get_item_values()
+def handler_button_start_alg(sender, app_data, param: Tuple[ga.GA, List]):
+    ga_alg, graph = param
+
+    get_item_values()  # заполнили settings
+
+    # замена start button
+    dpg.disable_item("button_start_alg")
+    dpg.hide_item("button_start_alg")
+
+    dpg.show_item("button_next_alg")
+    dpg.enable_item("button_next_alg")
+
+    ga_alg = ga.GA(convergence=0, num_of_individuals=10, selection_coefficient=0.2, probability_of_mutation=0.05, \
+            gens_mutation=0.1, num_of_generations=1000, graph=graph, reproduction=rf.panmixia_reproduction, \
+            mutations=mf.gen_mutations, selection=sf.elite_selection, fitness=ff.fitness_function)
+
+    # удаляем старый лог
+    if os.path.exists(".log.txt"):
+        os.remove(".log.txt")
+
+    step_ga = {}
+    step_ga = next(ga_alg.run_by_step(".log.txt"))
+
+    # заполняем данные
 
 
-# for button "Reset"
-def reset_settings():
-    settings.clear()
-    dpg.set_value("Number of Generations Slider", 1000)
-    settings.append(1000)
-    dpg.set_value("Number of Individuals Slider", 100)
-    settings.append(100)
-    dpg.set_value("Gens Mutation Slider", 0.1)
-    settings.append(0.1)
-    dpg.set_value("Selection Coefficient Slider", 0.1)
-    settings.append(0.1)
-    dpg.set_value("Probability of Mutation Slider", 0.05)
-    settings.append(0.05)
-    dpg.set_value("Log Cycle Slider", 50)
-    settings.append(50)
-    dpg.set_item_label("Mode of Visualisation", "Iterable")
-    settings.append("Iterable")
-    dpg.set_item_label("Transition Mode", "Button")
-    settings.append("Button")
 
 
-# gets all values from sliders
-def get_item_values():
-    settings.clear()
-    num_of_generations = dpg.get_value("Number of Generations Slider")
-    settings.append(num_of_generations)
-    num_of_individuals = dpg.get_value("Number of Individuals Slider")
-    settings.append(num_of_individuals)
-    gens_mutation = round(dpg.get_value("Gens Mutation Slider"), 3)
-    settings.append(gens_mutation)
-    selection_coefficient = round(dpg.get_value("Selection Coefficient Slider"), 3)
-    settings.append(selection_coefficient)
-    probability_of_mutation = round(dpg.get_value("Probability of Mutation Slider"), 3)
-    settings.append(probability_of_mutation)
-    log_cycle = dpg.get_value("Log Cycle Slider")
-    settings.append(log_cycle)
-    mode = dpg.get_item_label("Mode of Visualisation")
-    settings.append(mode)
-    transition_mode = dpg.get_item_label("Transition Mode")
-    settings.append(transition_mode)
 
-    print(num_of_generations)
-    print(num_of_individuals)
-    print(gens_mutation)
-    print(selection_coefficient)
-    print(probability_of_mutation)
-    print(log_cycle)
-    print(mode)
-    print(transition_mode)
-    print(settings)
+def handler_button_next():
+    pass
+
+def handler_button_back():
+    # замена next button
+    if dpg.is_item_enabled("button_next_alg"):
+        dpg.disable_item("button_next_alg")
+        dpg.hide_item("button_next_alg")
+
+        dpg.show_item("button_start_alg")
+        dpg.enable_item("button_start_alg")
+
+    create_graph_win.to_create_graph()
 
 
-# sets values to sliders
-def set_item_values():
-    dpg.set_value("Number of Generations Slider", settings[0])
-    dpg.set_value("Number of Individuals Slider", settings[1])
-    dpg.set_value("Gens Mutation Slider", settings[2])
-    dpg.set_value("Selection Coefficient Slider", settings[3])
-    dpg.set_value("Probability of Mutation Slider", settings[4])
-    dpg.set_value("Log Cycle Slider", settings[5])
-    dpg.set_item_label("Mode of Visualisation", settings[6])
-    dpg.set_item_label("Transition Mode", settings[7])

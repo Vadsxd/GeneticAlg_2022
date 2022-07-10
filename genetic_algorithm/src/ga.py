@@ -4,9 +4,9 @@
 Текущее базовое решение (02.07.2022)
 """
 
-import ga_functions as gen_algf
-import graph_functions as gf
-from individual import *
+import genetic_algorithm.src.ga_functions as gen_algf
+import genetic_algorithm.src.graph_functions as gf
+from genetic_algorithm.src.individual import *
 from copy import copy
 from typing import Optional
 
@@ -17,10 +17,10 @@ class GA:
     и запуск генетического алгоритма.
     """
 
-    def __init__(self, convergence, num_of_individuals, selection_coefficient, \
-                 probability_of_mutation, gens_mutation, \
-                 num_of_generations, graph, reproduction, \
-                 mutations, selection, fitness):
+    def __init__(self, convergence=None, num_of_individuals=None, selection_coefficient=None, \
+                 probability_of_mutation=None, gens_mutation=None, \
+                 num_of_generations=None, graph=None, reproduction=None, \
+                 mutations=None, selection=None, fitness=None):
         """
         ------Параметры------
         convergence - кол-во уникальных особей, при достижении которого
@@ -41,6 +41,9 @@ class GA:
         reproduction, mutation, selection, fitness - функции кроссовера,
         мутации, отбора и фитнеса.
         """
+
+        if graph is None:
+            return
 
         self.num_of_individuals = num_of_individuals
         self.selection_coefficient = selection_coefficient

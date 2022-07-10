@@ -1,4 +1,4 @@
-from graph_functions import individual_to_graph, tree_cost
+from genetic_algorithm.src.graph_functions import individual_to_graph, tree_cost
 
 
 class Individual:
@@ -19,10 +19,10 @@ class Individual:
 
     def str_gen_code(self):
         return format(self.gen_code, f"0^{Individual._len_gen_code}b")
-'''
+
     def __repr__(self):
         return self.str_gen_code()
-'''
+
 
 
 

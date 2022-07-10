@@ -8,7 +8,7 @@ random.choices в функциях отбора.
 
 """
 
-from graph_functions import individual_to_graph, tree_cost, get_number_of_edges
+from genetic_algorithm.src.graph_functions import individual_to_graph, tree_cost, get_number_of_edges
 
 
 def fitness_function(individual, init_graph, epsilon):

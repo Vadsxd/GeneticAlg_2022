@@ -5,7 +5,7 @@
 Функция кроссовера должна выдавать на выход список созданных особей.
 """
 
-from individual import Individual
+from genetic_algorithm.src.individual import Individual
 import random
 
 

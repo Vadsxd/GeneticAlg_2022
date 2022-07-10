@@ -18,17 +18,18 @@ names_vertexes = []
 def handler_button_finish():
     Tk().withdraw()  # не выводит левое окно
 
-    if graph == []:
+    """if graph == []:
         msg.showerror(title="Ошибка", message='Введите граф')
         return
 
     if not gr_func.is_connectivity_graph(graph):
         msg.showerror(title="Ошибка", message='Граф должен быть связанный')
-        return
+        return"""
+
 
     # запретить resizable
     dpg.configure_viewport(0, resizable=False)
-    alg_win.to_alg_window(graph, names_vertexes)
+    alg_win.to_alg_window([[(10, 1),(10,2)], [(10, 0)],[(10,0)]], names_vertexes)
 
 
 def handler_button_save():

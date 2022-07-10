@@ -1,5 +1,5 @@
 import dearpygui.dearpygui as dpg
-from windows.alg_win.event_handlers import get_item_values
+from windows.alg_win.setting_func import get_item_values
 
 from windows.create_graph_win.event_handlers import *
 from graph_view.png_func import create_empty_png_file

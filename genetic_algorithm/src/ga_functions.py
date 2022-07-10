@@ -4,7 +4,7 @@
 """
 
 import random
-from individual import Individual
+from genetic_algorithm.src.individual import Individual
 import os.path
 
 
