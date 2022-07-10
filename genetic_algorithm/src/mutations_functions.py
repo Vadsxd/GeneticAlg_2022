@@ -31,20 +31,11 @@ def gen_mutations(individuals, probability_of_mutation, gens_mutation, num_of_ge
 
     # выбираем особей для мутации
     ch = random.choices([False, True], [1 - probability_of_mutation, probability_of_mutation], k=len(individuals))
-    list_mutation = []
 
     for i in range(len(individuals)):
         if ch[i]:
             # производим мутацию особи
-            mut_indiv = mutate(individuals[i], gens_mutation, num_of_gens)
-
-            # заменяем особь в популяции на мут.
-            individuals[i] = mut_indiv
-
-            # сохраняем мутацию
-            list_mutation.append(mut_indiv)
-
-    return list_mutation
+            mutate(individuals[i], gens_mutation, num_of_gens)
 
 
 def mutate(individual, prob, num_of_gens):
@@ -73,9 +64,7 @@ def mutate(individual, prob, num_of_gens):
             new_gen_code = new_gen_code ^ mask
         mask = mask << 1
 
-    # создаем новую особь по мут. коду
-    mutant = Individual(new_gen_code)
-
-    return mutant
+    individual.gen_code = new_gen_code
+    individual.status = 'mutant'
 
 
