@@ -21,9 +21,9 @@ def add_edge(vert_name_1, vert_name_2, weight, graph, names_vertexes):
 
     # проверка на наличие ребра
     if find_edge(graph, ind_vert1, ind_vert2) is not None:
-        return False
+        del_edge(vert_name_1, vert_name_2, graph, names_vertexes)
 
-    # добавляем ребро
+    # добавляем
     graph[ind_vert1].append((weight, ind_vert2))
     graph[ind_vert2].append((weight, ind_vert1))
 

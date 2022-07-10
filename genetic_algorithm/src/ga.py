@@ -6,10 +6,10 @@
 
 import genetic_algorithm.src.ga_functions as gen_algf
 import genetic_algorithm.src.graph_functions as gf
-import reproduction_functions as rf 
-import mutations_functions as mf 
-import selection_functions as sf 
-import fitness_functions as ff 
+import genetic_algorithm.src.reproduction_functions as rf
+import genetic_algorithm.src.mutations_functions as mf
+import genetic_algorithm.src.selection_functions as sf
+import genetic_algorithm.src.fitness_functions as ff
 from genetic_algorithm.src.individual import *
 from copy import copy
 from typing import Optional
@@ -99,7 +99,7 @@ class GA:
 
 
             # пересчет значений фитнес ф-и для ф-и для мутантов
-            gen_algf.assign_fitness(mutants, self.graph, self.fitness, self.epsilon)
+            gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
 
             # отбор особей в новую популяцию
             individuals = self.selection(individuals, self.num_of_individuals, \
@@ -153,7 +153,7 @@ class GA:
 
 
             # пересчет значений фитнес ф-и для мутантов
-            gen_algf.assign_fitness(mutations, self.graph, self.fitness, self.epsilon)
+            gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
 
             childs, mutants, parents = [], [], []
             for individual in individuals:
