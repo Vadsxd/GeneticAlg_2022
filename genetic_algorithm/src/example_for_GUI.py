@@ -25,7 +25,7 @@ ga = GA(convergence=0, num_of_individuals=100, selection_coefficient=0.2, probab
 # step_ga = {'step': int, 'childes': [], 'mutations': [], 'new_population': []}
 step_ga = {}
 
-for step_ga in ga.run_by_step("C:\\Users\\Vasiliy\\Desktop\\current_version\\genetic_algorithm\\logs.txt"):
+for step_ga in ga.run_by_step("logs.txt"):
 	# например
 	fitness_value = [ind.fitness for ind in step_ga['new_population']]
 	print(step_ga['step'], ". Лучшее значение ф-ф:", max(fitness_value))

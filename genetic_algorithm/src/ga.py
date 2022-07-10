@@ -6,10 +6,10 @@
 
 import genetic_algorithm.src.ga_functions as gen_algf
 import genetic_algorithm.src.graph_functions as gf
-import reproduction_functions as rf 
-import mutations_functions as mf 
-import selection_functions as sf 
-import fitness_functions as ff 
+import genetic_algorithm.src.reproduction_functions as rf
+import genetic_algorithm.src.mutations_functions as mf
+import genetic_algorithm.src.selection_functions as sf
+import genetic_algorithm.src.fitness_functions as ff
 from genetic_algorithm.src.individual import *
 from copy import copy
 from typing import Optional
@@ -64,13 +64,15 @@ class GA:
         self.epsilon = 1 / gf.get_sum_of_edges(graph)
         self.convergence = convergence
 
+        # генератор
+        self.generator = None
+
         # итоговый ответ ГА, будет None пока работает ГА
         self.answer = None  # type: Optional[Individual]
 
         # установка значения аттрибута класса Individual
         Individual._len_gen_code = self.num_of_edges
         Individual._initial_graph = self.graph
-
 
 
 
@@ -108,7 +110,7 @@ class GA:
                                          self.selection_coefficient)
 
 
-    def run_by_step(self, path):
+    def create_generator(self, path):
         """
         Генератор пошагово выполнения ГА. При каждом вызове создает новое поколение
         и возвращает информацию об этапах создания этого поколения.
