@@ -9,22 +9,8 @@
 """
 
 import random
-from dataclasses import dataclass
 from genetic_algorithm.src.individual import Individual
 
-
-
-@dataclass
-class MutationInd:
-    """
-    Класс мутации одной особи.
-
-    ----Поля----
-        mutant - мутировавшее состояние особи.
-        norm_indiv - нормальное (без мутации) состояние особи.
-    """
-    mutant: Individual
-    norm_indiv: Individual
 
 
 def gen_mutations(individuals, probability_of_mutation, gens_mutation, num_of_gens):
@@ -53,7 +39,7 @@ def gen_mutations(individuals, probability_of_mutation, gens_mutation, num_of_ge
             mut_indiv = mutate(individuals[i], gens_mutation, num_of_gens)
 
             # заменяем особь в популяции на мут.
-            individuals[i] = mut_indiv.mutant
+            individuals[i] = mut_indiv
 
             # сохраняем мутацию
             list_mutation.append(mut_indiv)
@@ -90,8 +76,6 @@ def mutate(individual, prob, num_of_gens):
     # создаем новую особь по мут. коду
     mutant = Individual(new_gen_code)
 
-    # создаем объект MutationInd
-    mut_indiv = MutationInd(norm_indiv=individual, mutant=mutant)
+    return mutant
 
-    return mut_indiv
 
