@@ -6,8 +6,8 @@ import windows.alg_win.alg_window as alg_win
 
 def to_help_window():
     if dpg.does_item_exist("Window2"):
-        get_item_values()
-        dpg.hide_item("Window2")
+        dpg.delete_item("registry2")
+        dpg.delete_item("Window2")
 
     with dpg.window(tag="Help Window", label="Help Menu", width=620, height=500):
         dpg.add_text(
