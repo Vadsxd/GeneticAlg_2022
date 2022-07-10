@@ -26,16 +26,12 @@ def to_primary_window():
             pos=(110, 50)
         )
         dpg.add_text(
-            "If you want to upload graph by the file just press Upload Graph",
+            "If you want construct graph press Create Graph",
             pos=(80, 80)
         )
         dpg.add_text(
-            "If you want construct graph press Create Graph",
-            pos=(100, 110)
-        )
-        dpg.add_text(
             "For more information press Help (after you load graph)",
-            pos=(100, 140)
+            pos=(100, 110)
         )
         dpg.add_button(
             label="Exit Program",
