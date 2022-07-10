@@ -15,7 +15,6 @@ from copy import copy
 from typing import Optional
 
 
-
 class GA:
     """
     Класс, реализующий инициализацию
@@ -141,7 +140,7 @@ class GA:
         gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
 
         # вывод 0-ого шага
-        result_step['parents'] = copy(individuals)
+        result_step['parents'] = individuals.copy()
         
         for generation in range(1, self.num_of_generations+1):
             gen_algf.log(individuals, generation, path)
@@ -150,18 +149,17 @@ class GA:
             # запуск кроссовера
             new_individuals = self.reproduction(individuals, self.num_of_edges)
             gen_algf.assign_fitness(new_individuals, self.graph, self.fitness, self.epsilon)
-            result_step['childes'] = new_individuals  # возможно нужен copy
+            result_step['childes'] = new_individuals.copy() 
 
             # объединение потомков с родителями и произведение мутаций
             individuals += new_individuals
             mutations = self.mutation(individuals, self.probability_of_mutation, \
                                      self.gens_mutation, self.num_of_edges)
 
-            mutants = [mutation.mutant for mutation in mutations]
 
             # пересчет значений фитнес ф-и для мутантов
-            gen_algf.assign_fitness(mutants, self.graph, self.fitness, self.epsilon)
-            result_step['mutants'] = mutations
+            gen_algf.assign_fitness(mutations, self.graph, self.fitness, self.epsilon)
+            result_step['mutants'] = mutations.copy()
 
             # отбор особей в новую популяцию
             individuals = self.selection(individuals, self.num_of_individuals, \
@@ -178,6 +176,7 @@ class GA:
     def _check_convergence(self, individuals):
         gen_codes = [indiv.gen_code for indiv in individuals]
         return len(list(set(gen_codes))) <= self.convergence
+
 
 
 
