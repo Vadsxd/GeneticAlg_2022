@@ -8,10 +8,10 @@ class Individual:
     _len_gen_code = None  # длины ген. кода (одинак. для всех особ. в одном ГА)
     _initial_graph = None  # исходный граф (одинак. для всех особ. в одном ГА)
 
-    def __init__(self, code, fit=None):
+    def __init__(self, code, fit=None, status='parent'):
         # граф особи
         self.graph = individual_to_graph(code, self._initial_graph)
-
+        self.status = status # статус: родитель, потомок или мутант
         self.gen_code = code  # генетический код (в бин-ном формате)
         self.fitness = fit  # значение фитнес-функции
 
