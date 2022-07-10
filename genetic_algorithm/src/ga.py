@@ -167,7 +167,7 @@ class GA:
 
             yield result_step
 
-            result_step['parents'] = copy(individuals)
+            result_step['parents'] = individuals.copy()
 
 
         # сохранение ответа
