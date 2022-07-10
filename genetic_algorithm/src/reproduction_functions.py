@@ -8,7 +8,6 @@
 from genetic_algorithm.src.individual import Individual
 import random
 
-
 def uniform_reproduction(individuals, num_of_gens):
     """
     Функция, генерирующая новых особей с помощью
@@ -68,4 +67,3 @@ def panmixia_reproduction(individuals, num_of_gens):
         new_child.status = "child"
         new_individuals.append(new_child)
     return new_individuals
-

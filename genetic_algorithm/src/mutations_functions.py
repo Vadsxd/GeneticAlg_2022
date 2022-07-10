@@ -12,7 +12,6 @@ import random
 from genetic_algorithm.src.individual import Individual
 
 
-
 def gen_mutations(individuals, probability_of_mutation, gens_mutation, num_of_gens):
     """
     Функция, осуществляющая двоичную мутацию над некоторыми из
@@ -66,5 +65,4 @@ def mutate(individual, prob, num_of_gens):
 
     individual.gen_code = new_gen_code
     individual.status = 'mutant'
-
 

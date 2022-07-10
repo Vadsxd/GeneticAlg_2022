@@ -14,7 +14,6 @@ from genetic_algorithm.src.individual import *
 from copy import copy
 from typing import Optional
 
-
 class GA:
     """
     Класс, реализующий инициализацию
@@ -168,7 +167,7 @@ class GA:
             result_step['mutants'] = mutants
             result_step['parents'] = parents
             yield result_step
-            
+
             # отбор особей в новую популяцию
             individuals = self.selection(individuals, self.num_of_individuals, \
                                          self.selection_coefficient)

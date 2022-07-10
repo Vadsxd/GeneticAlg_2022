@@ -1,6 +1,5 @@
 from genetic_algorithm.src.graph_functions import individual_to_graph, tree_cost
 
-
 class Individual:
     """
     Класс, представляющий одну особь.
@@ -22,7 +21,6 @@ class Individual:
 
     def __repr__(self):
         return self.str_gen_code()
-
 
 
 

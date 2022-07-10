@@ -33,6 +33,9 @@ def elite_selection(individuals, num_of_individuals, coefficient):
 
     # выбор случайных особей
     new_individuals = random.choices(individuals, k=num_others)
-    return elite + new_individuals
+    result = elite + new_individuals
+    for i in range(len(result)):
+        result[i].status = 'parent'
+    return result
 
 
