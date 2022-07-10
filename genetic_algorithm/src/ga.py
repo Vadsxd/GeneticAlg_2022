@@ -94,10 +94,9 @@ class GA:
 
             # объединение потомков с родителями и произведение мутаций
             individuals += new_individuals
-            mutations = self.mutation(individuals, self.probability_of_mutation, \
+            self.mutation(individuals, self.probability_of_mutation, \
                                      self.gens_mutation, self.num_of_edges)
 
-            mutants = [mutation.mutant for mutation in mutations]
 
             # пересчет значений фитнес ф-и для ф-и для мутантов
             gen_algf.assign_fitness(mutants, self.graph, self.fitness, self.epsilon)
