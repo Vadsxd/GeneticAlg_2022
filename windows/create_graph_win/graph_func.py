@@ -1,5 +1,6 @@
 from genetic_algorithm.src.graph_functions import depth_search
 
+
 def add_edge(vert_name_1, vert_name_2, weight, graph, names_vertexes):
     # проверка на петли
     if vert_name_1 == vert_name_2:

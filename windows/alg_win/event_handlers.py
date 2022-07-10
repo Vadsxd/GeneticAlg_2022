@@ -1,9 +1,7 @@
-import dearpygui.dearpygui as dpg
 import genetic_algorithm.src.ga as ga
 from windows.alg_win.setting_func import *
-import  windows.create_graph_win.create_graph_window as create_graph_win
-from  graph_view.draw_graph import individual_to_png
-
+import windows.create_graph_win.create_graph_window as create_graph_win
+from graph_view.draw_graph import individual_to_png
 
 import os
 from typing import List, Tuple, Dict
@@ -43,7 +41,7 @@ def handler_button_stop():
 
 
 # for button "Start Algorithm"
-def handler_button_start_alg(sender, app_data, param: Tuple[ga.GA, List, List,Dict]):
+def handler_button_start_alg(sender, app_data, param: Tuple[ga.GA, List, List, Dict]):
     ga_alg, graph, names_vert, dict_name_indiv = param
 
     get_item_values()  # заполнили settings
@@ -79,13 +77,14 @@ def handler_button_start_alg(sender, app_data, param: Tuple[ga.GA, List, List,Di
         name = "Individual " + str(i)
         dict_name_indiv[name] = indiv
         data_listbox.append(name)
-        i+=1
+        i += 1
 
     dpg.set_item_label("listbox", "Generation 0")
     dpg.configure_item("listbox", items=data_listbox)
 
     # отобразить первую особь в списке
     handler_click_listbox("listbox", data_listbox[0], (graph, names_vert, dict_name_indiv))
+
 
 def handler_button_next():
     pass
@@ -109,7 +108,6 @@ def handler_button_reset():
     settings.append(0.05)
 
 
-
 def handler_button_back():
     # замена next button
     if dpg.is_item_enabled("button_next_alg"):
@@ -120,6 +118,7 @@ def handler_button_back():
         dpg.enable_item("button_start_alg")
 
     dpg.configure_item("listbox", items=[])
+    get_item_values()
     create_graph_win.to_create_graph()
 
 
@@ -158,4 +157,3 @@ def _update_texture(path_to_png):
         pos=(390, 60),
         parent="Window2"
     )
-

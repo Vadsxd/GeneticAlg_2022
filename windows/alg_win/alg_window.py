@@ -16,17 +16,16 @@ def to_alg_window(graph, names_vertexes):
         dpg.delete_item("registry")
         dpg.delete_item("Create Window")
         if dpg.does_item_exist("Window2"):
+            set_item_values()
             dpg.show_item("Window2")
 
     ga_alg = ga.GA()
     dict_name_indiv = {}
 
-
     # создаем новый файл png
     width_img = 255
-    height_img =255
+    height_img = 255
     data = create_empty_png_file('.indiv.png', width_img, height_img)
-
 
     if not dpg.does_item_exist("Window2"):
         # создание дин. структуры
@@ -141,6 +140,3 @@ def to_alg_window(graph, names_vertexes):
     dpg.set_viewport_height(550)
     dpg.set_viewport_width(1000)
     dpg.set_primary_window("Window2", True)
-
-    if settings:
-        set_item_values()
