@@ -91,8 +91,9 @@ def to_create_graph():
             label="Weight of Edge",
             pos=(10, 100),
             width=100,
-            min_value=0,
-            min_clamped=True
+            min_value=1,
+            min_clamped=True,
+            default_value=1
         )
         dpg.add_button(
             label="Add",

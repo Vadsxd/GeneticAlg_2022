@@ -43,13 +43,17 @@ def individual_to_png(individual, graph_list: List, names_vertexes, out_path: st
 
     indiv_graph = individual.graph
 
+    str_weight = ""
     # создаем ребра
     for vert1_ind, list_edges in enumerate(graph_list):
         for edges, vert2_ind in list_edges:
             edge_color = 'grey'
+            str_weight = ""
             if (edges, vert2_ind) in indiv_graph[vert1_ind]:
                 edge_color = 'black'
-            view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str(edges), color=edge_color)
+                str_weight = str(edges)
+
+            view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str_weight, color=edge_color)
 
     view_graph.render(engine='fdp', outfile=out_path)
 
