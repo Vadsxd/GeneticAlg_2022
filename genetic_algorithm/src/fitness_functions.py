@@ -27,7 +27,7 @@ def fitness_function(individual, init_graph, epsilon):
     """
 
     answer = 1 / tree_cost(individual.graph, init_graph)
-    if answer == float("Inf"):
+    if answer == 0:
         answer += epsilon
     n = len(init_graph)
     num_edges = get_number_of_edges(individual.graph)
