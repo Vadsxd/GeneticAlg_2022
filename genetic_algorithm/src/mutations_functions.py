@@ -34,7 +34,11 @@ def gen_mutations(individuals, probability_of_mutation, gens_mutation, num_of_ge
     for i in range(len(individuals)):
         if ch[i]:
             # производим мутацию особи
-            mutate(individuals[i], gens_mutation, num_of_gens)
+            mut_indiv = mutate(individuals[i], gens_mutation, num_of_gens)
+
+            # заменяем особь в популяции на мут.
+            individuals[i] = mut_indiv
+
 
 
 def mutate(individual, prob, num_of_gens):
@@ -63,6 +67,9 @@ def mutate(individual, prob, num_of_gens):
             new_gen_code = new_gen_code ^ mask
         mask = mask << 1
 
-    individual.gen_code = new_gen_code
-    individual.status = 'mutant'
+    # создаем новую особь по мут. коду
+    mutant = Individual(new_gen_code)
+    mutant.status = 'mutant'
+    return mutant
+
 
