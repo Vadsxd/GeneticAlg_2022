@@ -1,14 +1,18 @@
 import genetic_algorithm.src.ga as ga
-import genetic_algorithm.src.graph_functions as gf
 from windows.alg_win.setting_func import *
 import windows.create_graph_win.create_graph_window as create_graph_win
 from graph_view.draw_graph import individual_to_png
+import genetic_algorithm.src.graph_functions as gf
+from graph_view.png_func import create_empty_png_file
 
 import os
 from typing import List, Tuple, Dict
 
 ga_alg = None
 
+def handler_button_end(sender, app_data, param):
+    """while handler_button_next(sender, app_data, param):
+        pass"""
 
 def handler_button_stop():
     if dpg.is_item_enabled("button_next_alg"):
@@ -28,12 +32,22 @@ def handler_button_stop():
 
         dpg.enable_item("button_reset")
 
+        dpg.set_value("inf_indiv", "")
+        dpg.set_item_label("listbox", "Population")
+        dpg.configure_item("listbox", items=[])
+        width_img = 255
+        height_img = 255
+        create_empty_png_file('.indiv.png', width_img, height_img)
+        _update_texture('.indiv.png')
+
 
 # for button "Start Algorithm"
 def handler_button_start_alg(sender, app_data, param: List):
     graph, names_vert, dict_name_indiv = param
 
     get_item_values()  # заполнили settings
+
+    dpg.configure_item("inf_indiv", color=[255, 255, 255])
 
     # замена start button
     dpg.disable_item("button_start_alg")
@@ -63,37 +77,18 @@ def handler_button_start_alg(sender, app_data, param: List):
     handler_button_next(sender, app_data, (graph, names_vert, dict_name_indiv))
 
 
-
-
 def handler_button_next(sender, app_data, param):
     graph, names_vert, dict_name_indiv = param
 
-    global ga_alg
+    generation = None
+    try:
+        generation = _processing_step_ga(dict_name_indiv)
+    except StopIteration:
+        _processing_end_step(graph, names_vert)
+        return False
 
-    ga_step = next(ga_alg.generator)
 
-    dpg.set_item_label("listbox", "Generation: " + str(ga_step["step"]))
-
-    # именуем особи
-    i = 1
-    for indiv in ga_step["parents"]:
-        name = "Parents " + str(i)
-        dict_name_indiv[name] = indiv
-        i += 1
-
-    i = 1
-    for indiv in ga_step["childes"]:
-        name = "Child " + str(i)
-        dict_name_indiv[name] = indiv
-        i += 1
-
-    print(ga_step)
-
-    i = 1
-    for indiv in ga_step["mutants"]:
-        name = "Mutant " + str(i)
-        dict_name_indiv[name] = indiv
-        i += 1
+    dpg.set_item_label("listbox", f"Generation: {generation}")
 
     # сортируем имена
     tmp = sorted(dict_name_indiv.items(), key=lambda x: x[1].fitness, reverse=True)
@@ -104,6 +99,10 @@ def handler_button_next(sender, app_data, param):
 
     # отобразить первую особь в списке
     handler_click_listbox("listbox", data_listbox[0], (graph, names_vert, dict_name_indiv))
+    dpg.configure_item("listbox", default_value=data_listbox[0])
+
+    return True
+
 
 
 def handler_button_reset():
@@ -149,6 +148,7 @@ def handler_click_listbox(sender, app_data, param):
     message += "Fitness value: " + str(indiv.fitness) + "\n"
 
     dpg.set_value("inf_indiv", message)
+
     individual_to_png(indiv, graph, names_vertexes, ".indiv.png")
     _update_texture(".indiv.png")
 
@@ -180,3 +180,69 @@ def _update_texture(path_to_png):
         pos=(390, 80),
         parent="Window2"
     )
+
+
+def _processing_step_ga(dict_name_indiv):
+    """
+     Заполняет словарь dict_name_indiv по ключам - имена особей,
+        а по значению - сами особи текущего поколения
+
+    :return:
+        поколение (числом)
+    """
+
+    global ga_alg
+
+    ga_step = next(ga_alg.generator)
+
+    # именуем особи
+    i = 1
+    for indiv in ga_step["parents"]:
+        name = "Parents " + str(i)
+        dict_name_indiv[name] = indiv
+        i += 1
+
+    i = 1
+    for indiv in ga_step["childes"]:
+        name = "Child " + str(i)
+        dict_name_indiv[name] = indiv
+        i += 1
+
+    i = 1
+    for indiv in ga_step["mutants"]:
+        name = "Mutant " + str(i)
+        dict_name_indiv[name] = indiv
+        i += 1
+
+    return ga_step["step"]
+
+
+def _processing_end_step(graph, names_vertexes):
+    dpg.set_item_label("listbox", "End")
+
+    # обновляем listbox
+    dpg.configure_item("listbox", items=[])
+
+    global  ga_alg
+    indiv = ga_alg.answer
+
+    dpg.configure_item("inf_indiv", color=[0,255,0])
+    dpg.set_value("inf_indiv", f"The Best Individual \nFitness value: {indiv.fitness}")
+    individual_to_png(indiv, graph, names_vertexes, ".indiv.png")
+    _update_texture(".indiv.png")
+
+    # замена next button
+    dpg.disable_item("button_next_alg")
+    dpg.hide_item("button_next_alg")
+
+    dpg.show_item("button_start_alg")
+    dpg.enable_item("button_start_alg")
+
+    # разблокировка ползунков
+    dpg.enable_item("Gens Mutation Slider")
+    dpg.enable_item("Number of Generations Slider")
+    dpg.enable_item("Number of Individuals Slider")
+    dpg.enable_item("Selection Coefficient Slider")
+    dpg.enable_item("Probability of Mutation Slider")
+
+    dpg.enable_item("button_reset")
