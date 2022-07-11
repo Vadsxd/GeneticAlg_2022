@@ -15,18 +15,45 @@ graph = []
 names_vertexes = []
 
 
+def block_buttons():
+    dpg.disable_item("Save")
+    dpg.disable_item("Back")
+    dpg.disable_item("Clear")
+    dpg.disable_item("Help")
+    dpg.disable_item("Finish")
+    dpg.disable_item("Upload Graph")
+    dpg.disable_item("Add")
+    dpg.disable_item("Delete Vertex")
+    dpg.disable_item("Delete Edge")
+
+
+def unblock_buttons():
+    dpg.enable_item("Save")
+    dpg.enable_item("Back")
+    dpg.enable_item("Clear")
+    dpg.enable_item("Help")
+    dpg.enable_item("Finish")
+    dpg.enable_item("Upload Graph")
+    dpg.enable_item("Add")
+    dpg.enable_item("Delete Vertex")
+    dpg.enable_item("Delete Edge")
+
+
 def handler_button_finish(sender, app_data):
 
     Tk().withdraw()  # не выводит левое окно
 
     if graph == []:
+        block_buttons()
         msg.showerror(title="Ошибка", message='Введите граф')
+        unblock_buttons()
         return
 
     if not gr_func.is_connectivity_graph(graph):
+        block_buttons()
         msg.showerror(title="Ошибка", message='Граф должен быть связанный')
+        unblock_buttons()
         return
-
 
     alg_win.to_alg_window(graph, names_vertexes)
 
@@ -38,7 +65,7 @@ def handler_button_save():
     Tk().withdraw()  # не выводит левое окно
     type_files = [("All files", "*.*"),
                   ('Текст', '*.txt'),
-                   ('Изображение', '*.png')]
+                  ('Изображение', '*.png')]
     path = fd.asksaveasfilename(title="Сохранить как...", filetypes=type_files, defaultextension=".txt")
 
     if path == '':
@@ -46,7 +73,9 @@ def handler_button_save():
 
     _, ext = os.path.splitext(path)
     if ext not in [".txt", ".png"]:
+        block_buttons()
         msg.showerror(title="Ошибка", message='Файл должен быть только с разрешением .txt или .png')
+        unblock_buttons()
         return
 
     if ext == ".png":
@@ -59,8 +88,11 @@ def handler_button_save():
             file.write(gr_func.graph_to_str(graph, names_vertexes))
 
     except OSError:
+        block_buttons()
         msg.showerror(title="Ошибка", message='Не удалось создать файл')
+        unblock_buttons()
         return
+
 
 def handler_button_clear():
     graph.clear()
@@ -75,26 +107,32 @@ def handler_button_clear():
 def upload_graph():
     Tk().withdraw()  # не выводит левое окно
     path = fd.askopenfilename(title="Выберете файл",
-                              filetypes=(("Текст", "*.txt"), ("All files", "*.*"))
-                              , parent=None)
+                              filetypes=(("Текст", "*.txt"), ("All files", "*.*")),
+                              parent=None)
 
     if path == '':
         return
 
     _, ext = os.path.splitext(path)
     if not ext == ".txt":
+        block_buttons()
         msg.showerror(title="Ошибка", message='Файл должен быть только с разрешением .txt')
+        unblock_buttons()
         return
 
     try:
         with open(path, 'r') as file:
             if not read_graph_from_file(file, graph, names_vertexes):
+                block_buttons()
                 msg.showerror(title="Ошибка",
                               message='Не удалось прочитать файл. Возможно некоторые данные в файле некорректные')
+                unblock_buttons()
                 return
 
     except OSError:
+        block_buttons()
         msg.showerror(title="Ошибка", message='Не удалось открыть файл')
+        unblock_buttons()
         return
 
     graph_to_png(graph, names_vertexes, out_path='.tmp_graph.png')

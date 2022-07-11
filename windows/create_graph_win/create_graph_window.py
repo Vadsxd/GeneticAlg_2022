@@ -34,6 +34,7 @@ def to_create_graph():
 
     with dpg.window(tag="Create Window", label="Graph Menu", width=1000, height=550):
         dpg.add_button(
+            tag="Save",
             label="Save",
             pos=(260, 370),
             width=100,
@@ -41,6 +42,7 @@ def to_create_graph():
             callback=handler_button_save
         )
         dpg.add_button(
+            tag="Back",
             label="Back",
             pos=(260, 460),
             width=100,
@@ -48,6 +50,7 @@ def to_create_graph():
             callback=handler_button_back
         )
         dpg.add_button(
+            tag="Clear",
             label="Clear",
             pos=(10, 370),
             width=100,
@@ -63,6 +66,7 @@ def to_create_graph():
             callback=help_window_gr.to_help_window
         )
         dpg.add_button(
+            tag="Finish",
             label="Finish",
             pos=(10, 460),
             width=120,
@@ -70,6 +74,7 @@ def to_create_graph():
             callback=handler_button_finish
         )
         dpg.add_button(
+            tag="Upload Graph",
             label="Upload Graph",
             pos=(145, 460),
             width=100,
@@ -102,6 +107,7 @@ def to_create_graph():
             default_value=1
         )
         dpg.add_button(
+            tag="Add",
             label="Add",
             pos=(260, 55),
             width=100,
@@ -117,6 +123,7 @@ def to_create_graph():
             min_clamped=True
         )
         dpg.add_button(
+            tag="Delete Vertex",
             label="Delete Vertex",
             pos=(260, 175),
             width=100,
@@ -140,6 +147,7 @@ def to_create_graph():
             min_clamped=True
         )
         dpg.add_button(
+            tag="Delete Edge",
             label="Delete Edge",
             pos=(260, 280),
             width=100,
