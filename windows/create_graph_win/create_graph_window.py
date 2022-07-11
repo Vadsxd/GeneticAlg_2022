@@ -3,6 +3,7 @@ from windows.alg_win.setting_func import get_item_values
 
 from windows.create_graph_win.event_handlers import *
 from graph_view.png_func import create_empty_png_file
+import windows.help_window_create_gr.help_window_create_gr as help_window_gr
 
 
 def to_create_graph():
@@ -31,8 +32,6 @@ def to_create_graph():
             tag="texture_tag"
         )
 
-
-
     with dpg.window(tag="Create Window", label="Graph Menu", width=1000, height=550):
         dpg.add_button(
             label="Save",
@@ -54,6 +53,14 @@ def to_create_graph():
             width=100,
             height=30,
             callback=handler_button_clear
+        )
+        dpg.add_button(
+            label="Help",
+            tag="Help",
+            pos=(145, 430),
+            width=100,
+            height=20,
+            callback=help_window_gr.to_help_window
         )
         dpg.add_button(
             label="Finish",

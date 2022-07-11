@@ -132,7 +132,7 @@ def handler_button_next(sender, app_data, param):
 
     dpg.set_item_label("listbox", f"Generation:{generation}")
 
-    if vis == 1:
+    if vis:
         # обновляем listbox
         dpg.configure_item("listbox", items=data_listbox)
 
