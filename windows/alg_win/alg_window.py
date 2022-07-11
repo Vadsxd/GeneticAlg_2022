@@ -140,7 +140,7 @@ def to_alg_window(graph, names_vertexes):
         dpg.add_image(
             "texture_tag2",
             tag="indiv_img",
-            pos=(390, 60)
+            pos=(390, 80)
         )
 
 

@@ -1,4 +1,5 @@
 import genetic_algorithm.src.ga as ga
+import genetic_algorithm.src.graph_functions as gf
 from windows.alg_win.setting_func import *
 import windows.create_graph_win.create_graph_window as create_graph_win
 from graph_view.draw_graph import individual_to_png
@@ -156,7 +157,13 @@ def handler_click_listbox(sender, app_data, param):
     graph, names_vertexes, dict_name_indiv = param
     indiv = dict_name_indiv[app_data]
 
-    dpg.set_value("inf_indiv", f"Fitness value: {indiv.fitness}")
+    message = "Individual: --" + app_data + "--\nGenetic code: " + indiv.str_gen_code() + "\n"
+
+    weight_of_tree = gf.get_sum_of_edges(indiv.graph)
+    message += "Weight of individual graph: " + str(weight_of_tree) + "\n"
+    message += "Fitness value: " + str(indiv.fitness) + "\n"
+
+    dpg.set_value("inf_indiv", message)
     individual_to_png(indiv, graph, names_vertexes, ".indiv.png")
     _update_texture(".indiv.png")
 
@@ -185,6 +192,6 @@ def _update_texture(path_to_png):
     dpg.add_image(
         "texture_tag2",
         tag="indiv_img",
-        pos=(390, 60),
+        pos=(390, 80),
         parent="Window2"
     )
