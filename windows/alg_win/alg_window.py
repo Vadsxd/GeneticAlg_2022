@@ -42,7 +42,7 @@ def to_alg_window(graph, names_vertexes):
         )
         dpg.add_button(
             label="Back",
-            tag = "Back",
+            tag="Back",
             pos=(260, 460),
             width=100,
             height=30,
@@ -70,7 +70,7 @@ def to_alg_window(graph, names_vertexes):
         )
         dpg.add_button(
             label="Stop Algorithm",
-            tag = "Stop Algorithm",
+            tag="Stop Algorithm",
             pos=(10, 420),
             width=120,
             height=30,
@@ -86,7 +86,7 @@ def to_alg_window(graph, names_vertexes):
         )
         dpg.add_button(
             label="Reset",
-            tag = "button_reset",
+            tag="button_reset",
             pos=(260, 430),
             width=100,
             height=20,

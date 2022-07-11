@@ -11,11 +11,11 @@ from typing import List, Tuple, Dict
 
 ga_alg = None
 
+
 def handler_button_end(sender, app_data, param):
     # listbox
     dpg.set_item_label("listbox", f"Generation: ?")
     dpg.configure_item("listbox", items=[])
-
 
     # image clear
     width_img = 255
@@ -49,7 +49,6 @@ def handler_button_end(sender, app_data, param):
 
 
 def handler_button_stop():
-
     # замена next button
     dpg.disable_item("button_next_alg")
     dpg.hide_item("button_next_alg")
@@ -113,7 +112,7 @@ def handler_button_start_alg(sender, app_data, param: List):
     handler_button_next(sender, app_data, (graph, names_vert, dict_name_indiv))
 
 
-def handler_button_next(sender, app_data, param, vis = 1):
+def handler_button_next(sender, app_data, param, vis=1):
     graph, names_vert, dict_name_indiv = param
 
     generation = None
@@ -123,12 +122,11 @@ def handler_button_next(sender, app_data, param, vis = 1):
         _processing_end_step(graph, names_vert)
         return False
 
-
     # сортируем имена
     tmp = sorted(dict_name_indiv.items(), key=lambda x: x[1].fitness, reverse=True)
     data_listbox = [x[0] for x in tmp]
 
-    if vis==1:
+    if vis == 1:
         dpg.set_item_label("listbox", f"Generation: {generation}")
 
         # обновляем listbox
@@ -139,7 +137,6 @@ def handler_button_next(sender, app_data, param, vis = 1):
         dpg.configure_item("listbox", default_value=data_listbox[0])
 
     return True
-
 
 
 def handler_button_reset():
@@ -260,10 +257,10 @@ def _processing_end_step(graph, names_vertexes):
     # обновляем listbox
     dpg.configure_item("listbox", items=[])
 
-    global  ga_alg
+    global ga_alg
     indiv = ga_alg.answer
 
-    dpg.configure_item("inf_indiv", color=[0,255,0])
+    dpg.configure_item("inf_indiv", color=[0, 255, 0])
 
     message = "Best Individual\nGenetic code: " + indiv.str_gen_code() + "\n"
 
