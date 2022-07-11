@@ -9,21 +9,6 @@ from typing import List, Tuple, Dict
 
 ga_alg = None
 
-# for button "Iterable/To End"
-def change_mode():
-    if dpg.get_item_label("Mode of Visualisation") == "To End":
-        dpg.set_item_label("Mode of Visualisation", "Iterable")
-    else:
-        dpg.set_item_label("Mode of Visualisation", "To End")
-
-
-# for button "Button/SlideShow"
-def change_transition_mode():
-    if dpg.get_item_label("Transition Mode") == "Button":
-        dpg.set_item_label("Transition Mode", "SlideShow")
-    else:
-        dpg.set_item_label("Transition Mode", "Button")
-
 
 def handler_button_stop():
     if dpg.is_item_enabled("button_next_alg"):
