@@ -4,6 +4,7 @@ import windows.create_graph_win.create_graph_window as create_graph_win
 from graph_view.draw_graph import individual_to_png
 import genetic_algorithm.src.graph_functions as gf
 from graph_view.png_func import create_empty_png_file
+from genetic_algorithm.src.graph_functions import weight_of_min_tree
 
 import os
 from typing import List, Tuple, Dict
@@ -11,39 +12,74 @@ from typing import List, Tuple, Dict
 ga_alg = None
 
 def handler_button_end(sender, app_data, param):
-    """while handler_button_next(sender, app_data, param):
-        pass"""
+    # listbox
+    dpg.set_item_label("listbox", f"Generation: ?")
+    dpg.configure_item("listbox", items=[])
+
+
+    # image clear
+    width_img = 255
+    height_img = 255
+    create_empty_png_file('.indiv.png', width_img, height_img)
+    _update_texture('.indiv.png')
+
+    # text info
+    dpg.set_value("inf_indiv", "Loading...")
+
+    # блок. кноп
+    dpg.disable_item("Back")
+    dpg.disable_item("button_next_alg")
+    dpg.disable_item("To End")
+    dpg.disable_item("To End")
+    dpg.disable_item("Stop Algorithm")
+    dpg.disable_item("Help")
+    dpg.disable_item("button_reset")
+
+    while handler_button_next(sender, app_data, param, 0):
+        pass
+
+    # блок. кноп
+    dpg.enable_item("Back")
+    dpg.enable_item("button_next_alg")
+    dpg.enable_item("To End")
+    dpg.enable_item("To End")
+    dpg.enable_item("Stop Algorithm")
+    dpg.enable_item("Help")
+    dpg.enable_item("button_reset")
+
 
 def handler_button_stop():
-    if dpg.is_item_enabled("button_next_alg"):
-        # замена next button
-        dpg.disable_item("button_next_alg")
-        dpg.hide_item("button_next_alg")
 
-        dpg.show_item("button_start_alg")
-        dpg.enable_item("button_start_alg")
+    # замена next button
+    dpg.disable_item("button_next_alg")
+    dpg.hide_item("button_next_alg")
 
-        # разблокировка ползунков
-        dpg.enable_item("Gens Mutation Slider")
-        dpg.enable_item("Number of Generations Slider")
-        dpg.enable_item("Number of Individuals Slider")
-        dpg.enable_item("Selection Coefficient Slider")
-        dpg.enable_item("Probability of Mutation Slider")
+    dpg.show_item("button_start_alg")
+    dpg.enable_item("button_start_alg")
 
-        dpg.enable_item("button_reset")
+    # разблокировка ползунков
+    dpg.enable_item("Gens Mutation Slider")
+    dpg.enable_item("Number of Generations Slider")
+    dpg.enable_item("Number of Individuals Slider")
+    dpg.enable_item("Selection Coefficient Slider")
+    dpg.enable_item("Probability of Mutation Slider")
 
-        dpg.set_value("inf_indiv", "")
-        dpg.set_item_label("listbox", "Population")
-        dpg.configure_item("listbox", items=[])
-        width_img = 255
-        height_img = 255
-        create_empty_png_file('.indiv.png', width_img, height_img)
-        _update_texture('.indiv.png')
+    dpg.enable_item("button_reset")
+
+    dpg.set_value("inf_indiv", "")
+    dpg.set_item_label("listbox", "Population")
+    dpg.configure_item("listbox", items=[])
+    width_img = 255
+    height_img = 255
+    create_empty_png_file('.indiv.png', width_img, height_img)
+    _update_texture('.indiv.png')
 
 
 # for button "Start Algorithm"
 def handler_button_start_alg(sender, app_data, param: List):
     graph, names_vert, dict_name_indiv = param
+
+    print(weight_of_min_tree(graph))
 
     get_item_values()  # заполнили settings
 
@@ -77,7 +113,7 @@ def handler_button_start_alg(sender, app_data, param: List):
     handler_button_next(sender, app_data, (graph, names_vert, dict_name_indiv))
 
 
-def handler_button_next(sender, app_data, param):
+def handler_button_next(sender, app_data, param, vis = 1):
     graph, names_vert, dict_name_indiv = param
 
     generation = None
@@ -88,18 +124,19 @@ def handler_button_next(sender, app_data, param):
         return False
 
 
-    dpg.set_item_label("listbox", f"Generation: {generation}")
-
     # сортируем имена
     tmp = sorted(dict_name_indiv.items(), key=lambda x: x[1].fitness, reverse=True)
     data_listbox = [x[0] for x in tmp]
 
-    # обновляем listbox
-    dpg.configure_item("listbox", items=data_listbox)
+    if vis==1:
+        dpg.set_item_label("listbox", f"Generation: {generation}")
 
-    # отобразить первую особь в списке
-    handler_click_listbox("listbox", data_listbox[0], (graph, names_vert, dict_name_indiv))
-    dpg.configure_item("listbox", default_value=data_listbox[0])
+        # обновляем listbox
+        dpg.configure_item("listbox", items=data_listbox)
+
+        # отобразить первую особь в списке
+        handler_click_listbox("listbox", data_listbox[0], (graph, names_vert, dict_name_indiv))
+        dpg.configure_item("listbox", default_value=data_listbox[0])
 
     return True
 
@@ -227,7 +264,15 @@ def _processing_end_step(graph, names_vertexes):
     indiv = ga_alg.answer
 
     dpg.configure_item("inf_indiv", color=[0,255,0])
-    dpg.set_value("inf_indiv", f"The Best Individual \nFitness value: {indiv.fitness}")
+
+    message = "Best Individual\nGenetic code: " + indiv.str_gen_code() + "\n"
+
+    weight_of_tree = gf.get_sum_of_edges(indiv.graph)
+    message += "Weight of individual graph: " + str(weight_of_tree) + "\n"
+    message += "Fitness value: " + str(indiv.fitness) + "\n"
+
+    dpg.set_value("inf_indiv", message)
+
     individual_to_png(indiv, graph, names_vertexes, ".indiv.png")
     _update_texture(".indiv.png")
 

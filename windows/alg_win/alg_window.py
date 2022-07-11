@@ -33,6 +33,7 @@ def to_alg_window(graph, names_vertexes):
         dpg.add_text("", tag="inf_indiv", pos=(390, 10))
         dpg.add_button(
             label="To End",
+            tag="To End",
             pos=(260, 390),
             width=100,
             height=30,
@@ -41,6 +42,7 @@ def to_alg_window(graph, names_vertexes):
         )
         dpg.add_button(
             label="Back",
+            tag = "Back",
             pos=(260, 460),
             width=100,
             height=30,
@@ -68,6 +70,7 @@ def to_alg_window(graph, names_vertexes):
         )
         dpg.add_button(
             label="Stop Algorithm",
+            tag = "Stop Algorithm",
             pos=(10, 420),
             width=120,
             height=30,
@@ -75,6 +78,7 @@ def to_alg_window(graph, names_vertexes):
         )
         dpg.add_button(
             label="Help",
+            tag="Help",
             pos=(145, 470),
             width=100,
             height=20,
