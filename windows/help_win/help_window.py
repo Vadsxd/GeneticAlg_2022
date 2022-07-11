@@ -2,12 +2,12 @@ import dearpygui.dearpygui as dpg
 
 from windows.alg_win.event_handlers import get_item_values
 import windows.alg_win.alg_window as alg_win
+from windows.help_win.event_handlers import *
 
 
 def to_help_window():
     if dpg.does_item_exist("Window2"):
-        dpg.delete_item("registry2")
-        dpg.delete_item("Window2")
+        dpg.hide_item("Window2")
 
     with dpg.window(tag="Help Window", label="Help Menu", width=620, height=500):
         dpg.add_text(
@@ -19,7 +19,7 @@ def to_help_window():
             pos=(490, 410),
             width=100,
             height=30,
-            callback=alg_win.to_alg_window
+            callback=handler_button_back
         )
     dpg.set_viewport_height(500)
     dpg.set_viewport_width(620)
