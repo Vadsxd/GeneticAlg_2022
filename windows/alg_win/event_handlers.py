@@ -118,7 +118,7 @@ def handler_button_next(sender, app_data, param):
     generation = None
     try:
         generation = _processing_step_ga(dict_name_indiv)
-    except StopIteration:
+    except Exception:
         _processing_end_step(graph, names_vert)
         return False
 

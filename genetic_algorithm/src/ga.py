@@ -133,6 +133,11 @@ class GA:
         """
         result_step = {'step': 0, 'childes': [], 'mutants': [], 'parents': []}
 
+        if len(self.graph) == 2:
+            self.answer = Individual(1)
+            self.answer.fitness = 1.0
+            raise StopIteration
+
         # создание случайной популяции
         individuals = gen_algf.create_individuals(self.num_of_edges, self.num_of_individuals)
         gen_algf.assign_fitness(individuals, self.graph, self.fitness, self.epsilon)
