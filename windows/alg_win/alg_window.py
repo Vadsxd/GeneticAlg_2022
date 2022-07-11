@@ -7,11 +7,7 @@ from windows.alg_win.setting_func import *
 from graph_view.png_func import create_empty_png_file
 
 
-
 def to_alg_window(graph, names_vertexes):
-    if dpg.does_item_exist("Help Window"):
-        dpg.delete_item("Help Window")
-
     if dpg.does_item_exist("Create Window"):
         dpg.delete_item("registry")
         dpg.delete_item("Create Window")
@@ -142,7 +138,6 @@ def to_alg_window(graph, names_vertexes):
             tag="indiv_img",
             pos=(390, 60)
         )
-
 
     dpg.set_viewport_height(550)
     dpg.set_viewport_width(1000)
