@@ -22,9 +22,6 @@ def handler_button_end(sender, app_data, param):
     create_empty_png_file('.indiv.png', width_img, height_img)
     _update_texture('.indiv.png')
 
-    # text info
-    dpg.set_value("inf_indiv", "Loading...")
-
     # блок. кноп
     dpg.disable_item("Back")
     dpg.disable_item("button_next_alg")
@@ -34,7 +31,22 @@ def handler_button_end(sender, app_data, param):
     dpg.disable_item("Help")
     dpg.disable_item("button_reset")
 
+    i = 0
     while handler_button_next(sender, app_data, (*param, 0)):
+        # text info
+        if i % 400 == 0:
+            dpg.set_value("inf_indiv", "Loading")
+
+        if i % 400 == 100:
+            dpg.set_value("inf_indiv", "Loading.")
+
+        if i % 400 == 200:
+            dpg.set_value("inf_indiv", "Loading..")
+
+        if i % 400 == 300:
+            dpg.set_value("inf_indiv", "Loading...")
+
+        i += 1
         pass
 
 

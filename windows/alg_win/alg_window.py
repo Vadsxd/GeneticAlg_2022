@@ -30,7 +30,7 @@ def to_alg_window(graph, names_vertexes):
     with dpg.window(tag="Window2", label="Graph Menu", width=1000, height=550):
         dpg.add_listbox(items=[], label="Population", tag="listbox", callback=handler_click_listbox, width=270,
                         num_items=9, user_data=(graph, names_vertexes, dict_name_indiv))
-        dpg.add_text("", tag="inf_indiv", pos=(400, 5))
+        dpg.add_text("", tag="inf_indiv", pos=(400, 7))
         dpg.add_button(
             label="To End",
             tag="To End",
