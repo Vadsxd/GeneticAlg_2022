@@ -58,8 +58,6 @@ def find_edge(graph, vert1_ind, vert2_ind):
 
 
 def del_vert(graph, names_vertexes, vert_del_name):
-    print(names_vertexes)
-    print(vert_del_name)
     # есть ли такая вершина
     if vert_del_name not in names_vertexes:
         return False

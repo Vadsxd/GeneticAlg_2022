@@ -14,7 +14,6 @@ ga_alg = None
 
 def handler_button_end(sender, app_data, param):
     # listbox
-    dpg.set_item_label("listbox", f"Generation: ?")
     dpg.configure_item("listbox", items=[])
 
     # image clear
@@ -34,7 +33,7 @@ def handler_button_end(sender, app_data, param):
     dpg.disable_item("Stop Algorithm")
     dpg.disable_item("Help")
     dpg.disable_item("button_reset")
-    
+
     while handler_button_next(sender, app_data, (*param, 0)):
         pass
 
@@ -127,9 +126,9 @@ def handler_button_next(sender, app_data, param):
     tmp = sorted(dict_name_indiv.items(), key=lambda x: x[1].fitness, reverse=True)
     data_listbox = [x[0] for x in tmp]
 
-    if vis == 1:
-        dpg.set_item_label("listbox", f"Generation: {generation}")
+    dpg.set_item_label("listbox", f"Generation:{generation}")
 
+    if vis == 1:
         # обновляем listbox
         dpg.configure_item("listbox", items=data_listbox)
 

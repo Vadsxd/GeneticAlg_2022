@@ -12,6 +12,8 @@ def graph_to_png(graph_list: List, names_vertexes, out_path: str):
 
     view_graph = graphviz.Graph(strict=True)
     view_graph.attr('node', shape='circle')
+    view_graph.graph_attr.update(size="6,5")
+
 
     # создаем вершины
     for vert_ind in range(len(graph_list)):
@@ -22,7 +24,7 @@ def graph_to_png(graph_list: List, names_vertexes, out_path: str):
         for edges, vert2_ind in list_edges:
             view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str(edges))
 
-    view_graph.render(engine='fdp', outfile=out_path)
+    view_graph.render(engine='circo', outfile=out_path)
 
     path_without_ext, _ = os.path.splitext(out_path)
 
@@ -36,6 +38,7 @@ def individual_to_png(individual, graph_list: List, names_vertexes, out_path: st
 
     view_graph = graphviz.Graph(strict=True)
     view_graph.attr('node', shape='circle')
+    view_graph.graph_attr.update(size="6,4.2")
 
     # создаем вершины
     for vert_ind in range(len(graph_list)):
@@ -55,7 +58,7 @@ def individual_to_png(individual, graph_list: List, names_vertexes, out_path: st
 
             view_graph.edge(str(names_vertexes[vert1_ind]), str(names_vertexes[vert2_ind]), label=str_weight, color=edge_color)
 
-    view_graph.render(engine='fdp', outfile=out_path)
+    view_graph.render(engine='circo', outfile=out_path)
 
     path_without_ext, _ = os.path.splitext(out_path)
 

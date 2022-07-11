@@ -27,8 +27,7 @@ def handler_button_finish(sender, app_data):
         msg.showerror(title="Ошибка", message='Граф должен быть связанный')
         return
 
-    # запретить resizable
-    dpg.configure_viewport(0, resizable=False)
+
     alg_win.to_alg_window(graph, names_vertexes)
 
 
@@ -98,8 +97,6 @@ def upload_graph():
         msg.showerror(title="Ошибка", message='Не удалось открыть файл')
         return
 
-    print(*graph, sep='\n')
-
     graph_to_png(graph, names_vertexes, out_path='.tmp_graph.png')
     _update_texture('.tmp_graph.png')
 
@@ -142,8 +139,6 @@ def handler_button_del_edge():
 
 
 def handler_button_back():
-    # запретить resizable
-    dpg.configure_viewport(0, resizable=False)
 
     graph.clear()
     names_vertexes.clear()
@@ -176,7 +171,7 @@ def _update_texture(path_to_png):
     dpg.add_image(
         "texture_tag",
         tag="img",
-        pos=(500, 10),
+        pos=(400, 10),
         parent="Create Window"
     )
 

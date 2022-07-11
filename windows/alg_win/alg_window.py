@@ -30,7 +30,7 @@ def to_alg_window(graph, names_vertexes):
     with dpg.window(tag="Window2", label="Graph Menu", width=1000, height=550):
         dpg.add_listbox(items=[], label="Population", tag="listbox", callback=handler_click_listbox, width=270,
                         num_items=9, user_data=(graph, names_vertexes, dict_name_indiv))
-        dpg.add_text("", tag="inf_indiv", pos=(390, 10))
+        dpg.add_text("", tag="inf_indiv", pos=(400, 5))
         dpg.add_button(
             label="To End",
             tag="To End",
@@ -106,7 +106,7 @@ def to_alg_window(graph, names_vertexes):
             label="Number of Generations",
             pos=(10, 230),
             default_value=1000,
-            max_value=3000,
+            max_value=10000,
             width=180,
             height=30
         )
@@ -141,7 +141,7 @@ def to_alg_window(graph, names_vertexes):
         dpg.add_image(
             "texture_tag2",
             tag="indiv_img",
-            pos=(390, 80)
+            pos=(390, 80),
         )
 
     dpg.set_viewport_height(550)

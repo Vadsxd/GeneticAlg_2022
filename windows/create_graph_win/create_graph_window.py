@@ -31,8 +31,7 @@ def to_create_graph():
             tag="texture_tag"
         )
 
-    # разрешить resizable
-    dpg.configure_viewport(0, resizable=True)
+
 
     with dpg.window(tag="Create Window", label="Graph Menu", width=1000, height=550):
         dpg.add_button(
@@ -143,7 +142,7 @@ def to_create_graph():
         dpg.add_image(
             "texture_tag",
             tag="img",
-            pos=(500, 10)
+            pos=(400, 10)
         )
 
     dpg.set_viewport_height(550)
