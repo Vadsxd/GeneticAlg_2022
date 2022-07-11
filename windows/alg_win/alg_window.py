@@ -57,7 +57,7 @@ def to_alg_window(graph, names_vertexes):
             enabled=False,
             show=False,
             callback=handler_button_next,
-            user_data=(graph, names_vertexes, dict_name_indiv)
+            user_data=(graph, names_vertexes, dict_name_indiv, 1)
         )
         dpg.add_button(
             label="Start Algorithm",

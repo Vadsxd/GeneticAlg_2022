@@ -34,9 +34,10 @@ def handler_button_end(sender, app_data, param):
     dpg.disable_item("Stop Algorithm")
     dpg.disable_item("Help")
     dpg.disable_item("button_reset")
-
-    while handler_button_next(sender, app_data, param, 0):
+    
+    while handler_button_next(sender, app_data, (*param, 0)):
         pass
+
 
     # блок. кноп
     dpg.enable_item("Back")
@@ -109,11 +110,11 @@ def handler_button_start_alg(sender, app_data, param: List):
     # хрень полная
     ga_alg.generator = ga_alg.run_by_step(".log.txt")
 
-    handler_button_next(sender, app_data, (graph, names_vert, dict_name_indiv))
+    handler_button_next(sender, app_data, (graph, names_vert, dict_name_indiv, 1))
 
 
-def handler_button_next(sender, app_data, param, vis=1):
-    graph, names_vert, dict_name_indiv = param
+def handler_button_next(sender, app_data, param):
+    graph, names_vert, dict_name_indiv, vis = param
 
     generation = None
     try:
