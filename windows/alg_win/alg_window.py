@@ -38,7 +38,8 @@ def to_alg_window(graph, names_vertexes):
             width=100,
             height=30,
             callback=handler_button_end,
-            user_data=(graph, names_vertexes, dict_name_indiv)
+            user_data=(graph, names_vertexes, dict_name_indiv),
+            enabled=False
         )
         dpg.add_button(
             label="Back",

@@ -46,6 +46,7 @@ def handler_button_end(sender, app_data, param):
     dpg.enable_item("Stop Algorithm")
     dpg.enable_item("Help")
     dpg.enable_item("button_reset")
+    dpg.disable_item("To End")
 
 
 def handler_button_stop():
@@ -64,6 +65,7 @@ def handler_button_stop():
     dpg.enable_item("Probability of Mutation Slider")
 
     dpg.enable_item("button_reset")
+    dpg.disable_item("To End")
 
     dpg.set_value("inf_indiv", "")
     dpg.set_item_label("listbox", "Population")
@@ -98,6 +100,8 @@ def handler_button_start_alg(sender, app_data, param: List):
     dpg.disable_item("Selection Coefficient Slider")
     dpg.disable_item("Probability of Mutation Slider")
     dpg.disable_item("button_reset")
+
+    dpg.enable_item("To End")
 
     # удаляем старый лог
     if os.path.exists(".log.txt"):
@@ -288,3 +292,4 @@ def _processing_end_step(graph, names_vertexes):
     dpg.enable_item("Probability of Mutation Slider")
 
     dpg.enable_item("button_reset")
+    dpg.disable_item("To End")
